@@ -1,0 +1,67 @@
+
+.contenedor{
+    width: 100%;
+    background-color:var(--black);
+    overflow: hidden;
+}
+
+.slider-contenedor{
+    width: 100%;
+    display: flex;
+}
+
+.contenido-slider{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-shrink: 0;
+}
+.contenido-slider > img{
+    width: 100%;
+}
+
+
+
+
+.contenido-slider > div{
+    width: 100%;
+}
+
+
+
+.contenido-slider:nth-child(2) a{
+    background: #fff;
+    color: #332863;
+    
+}
+
+@media screen and (max-width:900px){
+    .contenido-slider > img{
+        width: 288px;
+    }
+    
+
+    .contenido-slider > div{
+        width: 40%;
+    }
+
+    .contenido-slider h2{
+        font-size: 23px;
+    }
+}
+
+
+@media screen and (max-width:600px){
+    .contenido-slider{
+       flex-direction: column-reverse;
+    }
+
+    .contenido-slider > div{
+        width: 80%;
+    }
+
+}
+
+
+/*chat redes sociales*/
