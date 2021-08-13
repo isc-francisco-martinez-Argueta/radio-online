@@ -2,72 +2,83 @@
 <html lang="es">
 
 <head>
-  <title>VOS FM | radio-online</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
+  <meta http-equiv="Expires" content="0">
+ 
+  <meta http-equiv="Last-Modified" content="0">
+ 
+  <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate">
+ 
+  <meta http-equiv="Pragma" content="no-cache">
+  
+  <title>VOS FM | Radio en Linea</title>
   <meta name="MobileOptimized" content="width">
   <meta name="HandheldFriendly" content="true">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-  <link rel="apple-touch-startup-image" href="https://isc-francisco-martinez-Argueta.github.io/radio-online/img/icon-vos.png">
-  <link rel="manifest" href="https://isc-francisco-martinez-Argueta.github.io/radio-online/manifest.json">
+  <link rel="apple-touch-startup-image" href="https://www.vosfm.com.mx/img/icon-vos.png">
+  <link rel="manifest" href="./manifest.json?n=123">
 
   <meta name="description"
     content="Somos una estación de radio que informa, divierte y entretiene, escúchanos por la frecuencia 91.3 fm y por nuestra pagina web www.vosfm.com.mx desde Bochil Chiapas México.">
-  <link rel="canonical" href="https://isc-francisco-martinez-Argueta.github.io/radio-online/">
-  <link rel="favicon" href="https://isc-francisco-martinez-Argueta.github.io/radio-online/img/icon-vos.png">
-  <link rel="apple-touch-icon" href="https://isc-francisco-martinez-Argueta.github.io/radio-online/img/icon-vos.png">
+  <link rel="canonical" href="https://www.vosfm.com.mx/">
+  <link rel="favicon" href="https://www.vosfm.com.mx/img/icon-vos.png">
+  <link rel="apple-touch-icon" href="https://www.vosfm.com.mx/img/icon-vos.png">
   <meta name="theme-color" content="#2b6ab5">
   <meta name="twitter:card" content="summary">
   <meta property="og:type" content="website">
-  <link rel="icon" href="https://isc-francisco-martinez-Argueta.github.io/radio-online/img/icon-vos.png" type="image/x-icon">
+  <link rel="icon" href="img/icon-vos.png" type="image/x-icon">
 
   <meta property="og:title" name="twitter:title" content="Radio en Linea - VOS FM ">
   <meta property="og:description" name="twitter:description"
     content="Somos una estación de radio que informa, divierte y entretiene, escúchanos por la frecuencia 91.3 fm y por nuestra pagina web www.vosfm.com.mx desde Bochil Chiapas México.">
-  <meta property="og:image" name="twitter:image" content="https://isc-francisco-martinez-Argueta.github.io/radio-online/img/baner-listo.png">
-  <meta property="og:url" name="twitter:url" content="https://isc-francisco-martinez-Argueta.github.io/radio-online/">
+  <meta property="og:image" name="twitter:image" content="https://vosfm.com.mx/img/baner-listo.png">
+  <meta property="og:url" name="twitter:url" content="https://vosfm.com.mx">
 
 
   <meta name="application-name" content="Radio en linea" />
   <meta name="author" content="Francisco Alberto Martinez Argueta" />
   <meta name="keywords" content="Radio en linea, Radio, Noticias, Musica, vos fm" />
-
+ 
 
   <!-- Estilos Css -->
-  <link rel="stylesheet" href="https://isc-francisco-martinez-Argueta.github.io/radio-online/css/styles.css">
-  <link rel="stylesheet" href="https://isc-francisco-martinez-Argueta.github.io/radio-online/css/estilos.css">
-
-  <link href="https://fonts.googleapis.com/css?family=Red+Hat+Text:400,500,700&display=swap" rel="stylesheet">
-
+  <link rel="stylesheet" href="css/styles2.css?n=123">
+  <link rel="stylesheet" href="css/estilos2.css?n=123">
+  <link  rel="stylesheet" href="https://fonts.googleapis.com/css?family=Red+Hat+Text:400,500,700&display=swap">
+  
+    
 </head>
 
 <body>
-  <!-- Load Facebook SDK for JavaScript -->
-  <div id="fb-root"></div>
-  <script>
-    window.fbAsyncInit = function () {
-      FB.init({
-        xfbml: true,
-        version: 'v8.0'
-      });
-    };
+ <!-- Messenger plugin del chat Code -->
+    <div id="fb-root"></div>
 
-    (function (d, s, id) {
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)) return;
-      js = d.createElement(s); js.id = id;
-      js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));</script>
+    <!-- Your plugin del chat code -->
+    <div id="fb-customer-chat" class="fb-customerchat">
+    </div>
 
-  <!-- Your Chat Plugin code -->
-  <div class="fb-customerchat" attribution=setup_tool page_id="946850032096077" theme_color="#2b6ab5"
-    logged_in_greeting="VOS FM, deja tus saludos y tus peticiones, Escuchanos  a travez www.vosfm.com.mx"
-    logged_out_greeting="VOS FM, deja tus saludos y tus peticiones, Escuchanos  a travez www.vosfm.com.mx">
-  </div>
+    <script>
+      var chatbox = document.getElementById('fb-customer-chat');
+      chatbox.setAttribute("page_id", "112156494292784");
+      chatbox.setAttribute("attribution", "page_inbox");
+      window.fbAsyncInit = function() {
+        FB.init({
+          xfbml            : true,
+          version          : 'v11.0'
+        });
+      };
+
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/es_LA/sdk/xfbml.customerchat.js';
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+    </script>
 
 
   <div class="scroll-top-btn hidden-scroll-top" id="top-btn"><span id="top-btn" class="fas fa-angle-up"></span></div>
@@ -79,9 +90,8 @@
       <div class="logo-box">
         <div class="miradio">
           <div class="player">
-            <audio type="audio/mpeg" class="player__audio" controls id="audio">
-              <source src="https://freeus5.listen2myradio.com/live.mp3?typeportmount=s1_20453_stream_110716116"
-                type="audio/mpeg" />
+            <audio   class="player__audio" controls id="audio">
+              <source src="https://us1freenew.listen2myradio.com/live.mp3?typeportmount=s1_5228_stream_932777608" type="audio/mpeg"/>
             </audio>
 
             <div class="player__controls" id="background">
@@ -116,7 +126,7 @@
             <li><a href="#">Contactos</a></li> -->
           <div class="box-social-menufooter" style="color: antiquewhite;">
 
-            <a href="https://www.facebook.com/vosfmoficial">
+            <a href="https://www.facebook.com/search/top?q=vos%20fm%20xhbochl">
               <div class="social-circle"><i class="fab fa-facebook"></i></div>
             </a>
             <a href="https://www.instagram.com/vosfmoficial">
@@ -140,7 +150,7 @@
     </nav>
 
     <!-- Imagen Header -->
-    <video src="img/headervideo1.mp4" autoplay loop muted poster="https://isc-francisco-martinez-Argueta.github.io/radio-online/img/headervideo1.png" id="video_background"
+    <video src="img/headervideo1.mp4" autoplay loop muted poster="img/headervideo1.png" id="video_background"
       preload="auto" volume="50">
 
     </video>
@@ -160,7 +170,9 @@
           </a>
         </div>
         <div class="social-item">
-          <div class="circle-social"><i class="fab fa-whatsapp"></i></div>
+          <a href="https://wa.link/cwxkne" target="_blank">
+           <div class="circle-social"><i class="fab fa-whatsapp"></i></div>
+          </a>
         </div>
         <div class="social-item">
           <a href="https://www.youtube.com/channel/UCvjFelhaLQx6wCDMLrxASIg?view_as=subscriber" target="_blank">
@@ -169,10 +181,10 @@
         </div>
       </div>
       <div class="welcome">
-        <h1><img src="https://isc-francisco-martinez-Argueta.github.io/radio-online/img/logo.gif" class="logo" alt=""></h1>
-
-
-        <button id="abajo">Ver abajo</button>
+        <h1><img src="img/logo.gif" class="logo" alt=""></h1>
+        
+        <button    id="abajo"><a href="#clientes">
+       Ver abajo </a></button >
       </div>
     </div>
 
@@ -184,9 +196,9 @@
     <!-- Otras plataformas -->
     <section class="plataformasradio">
       <div class="radios">
-        <a href="https://mytuner-radio.com/radio/vos-fm-mexico-474599/"><img src="https://isc-francisco-martinez-Argueta.github.io/radio-online/img/mytuner_logo.png" alt=""
+        <a href="https://vosfmradiobochil.radio12345.com/"><img src="img/mytuner_logo.png" alt=""
             class="mystuner"></a>
-        <a href="https://vosfmradioonline.radio12345.com/"><img src="https://isc-francisco-martinez-Argueta.github.io/radio-online/img/logo-listener.png" alt="" class="listener">
+        <a href="https://vosfmradiobochil.radio12345.com/"><img src="img/logo-listener.png" alt="" class="listener">
         </a>
       </div>
       <h2 style="padding-bottom: 20px;"><span>(Escuchanos en diferentes plataformas)</span> </h2>
@@ -196,23 +208,27 @@
 
     </section>
     <!-- Clientes -->
-    <section class="clientes">
+    <section class="clientes" id="clientes">
       <div class="info-container">
         <div class="contenedor">
           <div class="slider-contenedor">
+              
             <section class="contenido-slider">
-              <img src="https://isc-francisco-martinez-Argueta.github.io/radio-online/img/anunciate.png" alt="">
+              <img src="img/anunciate.png" alt="Imagen anunciate">
+            </section>
+           
+            <section class="contenido-slider">
+              <img src="img/anunciate2.png" alt="Imagen anunciate">
             </section>
             <section class="contenido-slider">
-              <img src="https://isc-francisco-martinez-Argueta.github.io/radio-online/img/anunciate2.png" alt="">
+              <img src="img/anunciate3.png" alt="Imagen anunciate">
             </section>
-            <section class="contenido-slider">
-              <img src="https://isc-francisco-martinez-Argueta.github.io/radio-online/img/anunciate3.png" alt="">
-            </section>
+            
 
             <section class="contenido-slider">
-              <img src="https://isc-francisco-martinez-Argueta.github.io/radio-online/img/anunciate.png" alt="">
+              <img src="img/anunciate.png" alt="Imagen anunciate">
             </section>
+            
           </div>
         </div>
       </div>
@@ -237,45 +253,28 @@
 
     <div class="footer-social-icons">
       <ul>
-        <li><a href="#"><i class="fab fa-facebook"></i></a></li>
-        <li><a href="#"><i class="fab fa-instagram"></i></a></li>
-        <li><a href="#"><i class="fab fa-whatsapp"></i></a></li>
+        <li><a href="https://www.facebook.com/search/top?q=vos%20fm%20xhboch" target="_blank"><i class="fab fa-facebook"  ></i></a></li>
+        <li><a href="https://www.instagram.com/vosfmoficial/"  target="_blank"><i class="fab fa-instagram"></i></a></li>
+        <li><a href="https://wa.link/cwxkne" target="_blank"><i class="fab fa-whatsapp"></i></a></li>
         <li><a href="#"><i class="fab fa-youtube"></i></a></li>
       </ul>
     </div>
-    <!-- <div class="footer-menu-one">
-    <ul>
-      <li><a href="#">Inicio</a></li>
-      <li><a href="#">Clientes</a></li>
-      <li><a href="#">Servicios</a></li>
-      <li><a href="#">Locutores</a></li>
-      <li><a href="#">Programas</a></li>
-      
-      
-      
-    </ul>
-  </div>
-  <div class="footer-menu-two">
-    <ul>
-      <li><a href="#">Galeria</a></li>
-      <li><a href="#">Nosotros</a></li>
-      <li><a href="#">Noticias</a></li>
-      <li><a href="#">Contactos</a></li>
-      
-    </ul>
-  </div> -->
+    
+  <br>
+  <br>
+  
   </footer>
   <div class="footer-bottom">
-    <p>Desarrollador Web: <a href="#">Francisco Martinez</a></p>
+    <p>Desarrollador Web: <a href="https://www.vosfm.com.mx/profile">Francisco Martinez</a></p>
   </div>
 
 
   <!-- Scripts -->
-  <script src="https://kit.fontawesome.com/35db202371.js"></script>
-  <script src="https://isc-francisco-martinez-Argueta.github.io/radio-online/js/app.js"></script>
-  <script src="https://isc-francisco-martinez-Argueta.github.io/radio-online/js/modules.js" type="module"></script>
-  <script src="https://isc-francisco-martinez-Argueta.github.io/radio-online/js/main.js"></script>
-  <script src="https://isc-francisco-martinez-Argueta.github.io/radio-online/script.js"></script>
+<script src="https://kit.fontawesome.com/35db202371.js"></script>
+<script src="js/menu.js?n=123" ></script>
+<script src="js/modules.js?n=123" type="module"></script>
+<script src="js/main.js?n=123"></script>
+<script src="./script.js?n=123"></script>
 </body>
 
 </html>
