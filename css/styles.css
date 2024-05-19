@@ -61,48 +61,21 @@ a{
     left: 0;
     width: 100%;
     height: 80px;
-    background: #000000a3;;
+    background: #000000a3;
+    /* background: #ffffffa3; */
     display: flex;
-    justify-content: space-between;
     align-items: center;
     z-index: 9999;
-}
-.menu .logo-box{margin-left: 30px;}
-.menu .logo-box h1 a{
-    text-decoration: none;
-    font-size: var(--title);
-    font-weight: 400;
-    color:var(--black);
-}
-.menu .list-container{margin-right: 20px;}
-.menu .list-container ul{display: flex;}
-.menu .list-container ul li{list-style: none;}
-.menu .list-container ul li a{
-    text-decoration: none;
-    margin: 0px 10px;
-    padding:8px;
-    color: var(--white);
-    border-radius: 24px;
-    transition: 0.3s;
-    font-size: 16px;
-}
-.menu .list-container ul li a.active{
-    background: var(--red);
-    color:#fff;
-}
-.menu .list-container ul li a:hover{
-    background: var(--red);
-    color:#fff;
+    padding: 0 1rem;
 }
 
-.btn-menu > .fa-bars{
-    display: none;
-}
+
+
 /**reproductor**/
 .player {
     width: 700px;
     height: 21px;
-    //background: blue;
+    /* background: blue; */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -114,8 +87,8 @@ a{
   
   .player__controls {
     display: flex;
-    width: 95%;
-    justify-content: left;
+    gap: 10px;
+    width: 100%;
     align-items: center;
     outline: 0;
     border:0;
@@ -162,7 +135,6 @@ a{
     display: none;
 }
 .boxinforadio{
-    margin-left: 20px;
     width: 34%;
     height: 40px;
     background:var(--black);
@@ -225,111 +197,20 @@ a{
     opacity: 0;
 }
 
-.box-social-menufooter{ display: none;}
+
 
 
 
 
 
 @media only screen and (max-width:900px){
-    .btn-menu > .fa-bars{
-        display: block;
-        position:absolute;
-        right: 30px;
-        top: 24px;
-        font-size: 28px;
-        color: var(--white);
-        transition: 0.5s;
-        cursor: pointer;
-    }
-    .btn-menu > .fa-times{color: var(--red);}
-    .btn-menu > .fa-bars:hover{color:var(--red);}
-    .menu .logo-box{margin-left: 30px;}
-    .menu .list-container{
-        position: fixed;
-        top:80px;
-        left:-100%;
-        background: rgb(0,0,0);
-        width: 100%;
-        height: calc(100vh - 80px);
-    }
-    .menu .list-container .lists{
-        width: 100%;
-        height: 100%;
-        display: flex;
-        align-items: center;
-        padding-top: 40px;
-        flex-direction: column;
-        border-top: 4px solid var(--red);
-    }
-    .menu .list-container ul li{
-        width: 90%;
-        
-        display: flex;
-        justify-content: center;
-    }
-    .menu .list-container ul li a{
-        color: var(--white);
-        font-size: 20px;
-        text-align: center;
-        padding:12px 0px;
-    }
-    .menu .list-container ul li a.active{
-        background: none;
-        color:var(--red);
-    }
-    .menu .list-container ul li a:hover{
-        background: none;
-        color:var(--red);
-    }
     .boxinforadio{
-        margin-left: 4px;
-        justify-content: center;
-        align-items: center;
-        width: 80%;
-       
-        
-    
+        width: 100%;
     }
     .player {
-        width: 270px;
+        width: 100%;
         height: 21px;  
     }
-    .box-social-menufooter{
-        width: 100%;
-        color: white;
-        
-        margin-top: 100px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-    }
-    .box-social-menufooter a{
-        text-decoration: none;
-    }
-
-    .box-social-menufooter .social-circle{
-        margin-left: 8px;
-        width:40px;
-        height:40px;
-        border-radius:50%;
-        color: var(--red);
-        font-weight: bold;
-        font-size: 30px;
-        background-color: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        box-shadow: -2px 4px 12px -3px rgba(191,191,191,0.73);
-    }
-    .box-social-menufooter .social-circle:hover{
-        background-color: var(--red);
-        color:white ;
-    }
-
-    
-   
-
     
 }
 
