@@ -65,6 +65,8 @@ a{
     background: #ffffffa3;
     display: flex;
     align-items: center;
+    flex-direction: column;
+    justify-content: center;
     z-index: 9999;
     padding: 0 1rem;
 }
