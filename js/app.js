@@ -2,23 +2,23 @@
 let menuContent = document.querySelector('.menu');
 //Scroll Efect
 
- let prevScrollPos = window.pageYOffset;
- let goTop = document.querySelector('.go-top');
+//  let prevScrollPos = window.pageYOffset;
+//  let goTop = document.querySelector('.go-top');
 
-window.onscroll = () => {
+// window.onscroll = () => {
   
-  //Hide & Show - Scroll Menu (Function)
-  let currentScrollPos = window.pageYOffset;
+//   //Hide & Show - Scroll Menu (Function)
+//   let currentScrollPos = window.pageYOffset;
 
-  if (prevScrollPos > currentScrollPos) {
-    menuContent.style.top = '0px';
-    menuContent.style.transition = '0.5s';
-  }else{
-    menuContent.style.top = '-80px';
-    menuContent.style.transition = '0.5s';
-  }
-  prevScrollPos = currentScrollPos;
-}
+//   if (prevScrollPos > currentScrollPos) {
+//     menuContent.style.top = '0px';
+//     menuContent.style.transition = '0.5s';
+//   }else{
+//     menuContent.style.top = '-80px';
+//     menuContent.style.transition = '0.5s';
+//   }
+//   prevScrollPos = currentScrollPos;
+// }
 
 
 
