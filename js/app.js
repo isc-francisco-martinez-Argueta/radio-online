@@ -43,3 +43,9 @@ audio.addEventListener('ended', function() {
 
 //video
 
+document.addEventListener('DOMContentLoaded', function() {
+  var video = document.getElementById('video_background');
+  video.play().catch(error => {
+      console.log('Error al reproducir el video automáticamente:', error);
+  });
+});
