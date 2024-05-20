@@ -13,6 +13,6 @@ export function digitalClock(clock) {
         let clockHour = new Date().toLocaleTimeString('en-US', options);
         
         // Mostrar la hora en el elemento especificado
-        d.querySelector(clock).innerHTML = `<h3>${clockHour}</h3>`;
+        d.querySelector(clock).innerHTML = `<h6 class="p-0 m-0">${clockHour}</h6>`;
     }, 1000);
 }

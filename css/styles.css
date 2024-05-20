@@ -56,17 +56,9 @@ a{
 }
 
 .menu{
-    position: fixed;
-  
     width: 100%;
     height: 80px;
-    background: #000000a3;
-    /* background: #ffffffa3; */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items:start;
-    z-index: 9999;
+    background: #000000a3;  
     padding: 0 1rem;
 }
 
@@ -131,7 +123,6 @@ a{
     background-size: cover;
 }
 
-
 .hide {
     display: none;
 }
@@ -141,25 +132,25 @@ a{
     background:var(--black);
     border-radius: 10px;
     color: blanchedalmond;
-    display:flex;
-    /* justify-content: space-between; */
-    align-items: center;
-    
-
 }
 .horareproductor{
     width: 150px;
     height: 19px;
-    /* padding: 0px 12px; */
     font-size: 11px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     border-radius:0% 5px 5px 0;
     background-color: #ca3039;
-    
-    
 }
+#reloj h6{
+    font-weight: 700;
+    font-size: 13px;    
+}
+
+.boxinforadio > marquee{
+    width: 100%;
+    font-weight: 700;
+    font-size: 14px;
+}
+
 
 /*****scroll-top-btn*****/
 
@@ -258,7 +249,6 @@ a{
     width: 100%;
     height: 100%;
     background: rgba(0,0,0,0.6);
-
     display: flex;
     justify-content: center;
     align-items: center;
@@ -275,7 +265,7 @@ a{
     margin-top: 5px;
 }
 
-.img-header .welcome > button{
+.button-danger{
     width: 170px;
     height: 40px;
     background: var(--red);

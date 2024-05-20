@@ -38,3 +38,8 @@ audio.addEventListener('ended', function() {
   console.log('La reproducción del audio ha terminado.');
   handleEndOfAudio()
 });
+
+
+
+//video
+
