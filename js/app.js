@@ -1,23 +1,25 @@
 const audio = document.getElementById("audio");
 const playPause = document.getElementById("play");
 
+// Establecer la URL de la transmisión de radio
+const radioUrl = "https://fdsfdsfdsf.radio12345.com/intro.mp3";
+audio.src = radioUrl;
+
+function togglePlayPauseIcons() {
+  playPause.querySelector(".pause-btn").classList.toggle("hide");
+  playPause.querySelector(".play-btn").classList.toggle("hide");
+  playPause.classList.toggle("red");
+  playPause.classList.toggle("blue");
+}
+
 function handleAudioState() {
-  if (audio.paused || audio.ended) {
-    playPause.querySelector(".pause-btn").classList.toggle("hide");
-    playPause.querySelector(".play-btn").classList.toggle("hide");
-    playPause.classList.toggle("red"); // Cambiar el color del botón de reproducción
-    playPause.classList.toggle("blue");
-  } else {
-    playPause.querySelector(".pause-btn").classList.toggle("hide");
-    playPause.querySelector(".play-btn").classList.toggle("hide");
-    playPause.classList.toggle("blue"); // Cambiar el color del botón de reproducción
-    playPause.classList.toggle("red");    
-  }
+  togglePlayPauseIcons();
 }
 
 function handleEndOfAudio() {
-  handleAudioState(); // Manejar el estado del audio al finalizar
-  // Aquí puedes agregar más acciones que deseas realizar al finalizar el audio
+  audio.currentTime = 0; // Reiniciar el audio al principio
+  audio.pause();
+  handleAudioState(); // Asegurar que los iconos estén en el estado correcto
 }
 
 playPause.addEventListener("click", () => {
@@ -31,3 +33,8 @@ playPause.addEventListener("click", () => {
 audio.addEventListener("play", handleAudioState);
 audio.addEventListener("pause", handleAudioState);
 audio.addEventListener("ended", handleEndOfAudio);
+
+audio.addEventListener('ended', function() {
+  console.log('La reproducción del audio ha terminado.');
+  handleEndOfAudio()
+});

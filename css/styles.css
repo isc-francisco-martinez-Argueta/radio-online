@@ -63,9 +63,9 @@ a{
     background: #000000a3;
     /* background: #ffffffa3; */
     display: flex;
-    align-items: center;
     flex-direction: column;
     justify-content: center;
+    align-items:start;
     z-index: 9999;
     padding: 0 1rem;
 }
