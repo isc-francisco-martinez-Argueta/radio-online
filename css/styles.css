@@ -6,6 +6,16 @@
    --title:35px;
    --text:19px;
 }
+@media (prefers-color-scheme: dark) {
+    :root {
+        --red:#ec3838;
+        --black:#252a34;
+        --blue:#2b6ab5;
+        --white:#eaeaea;
+        --title:35px;
+        --text:19px;
+    }
+}
 
 *{
     margin:0;
