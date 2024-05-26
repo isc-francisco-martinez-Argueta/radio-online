@@ -12,7 +12,6 @@ const CACHE_NAME = 'v1_cache_programador_fitness',
     './img/anunciate.png',
     './img/anunciate2.png',
     './img/anunciate3.png',
-    './img/baner-listo.png',
     './img/favicon.png',
     './img/footer.jpg',
     './img/headervideo1.mp4',
@@ -37,13 +36,11 @@ const CACHE_NAME = 'v1_cache_programador_fitness',
     './img/img-9.jpg',
     './img/logo-listener.png',
     './img/logo.gif',
-    './img/LogoVosFM-black.png',
     './img/LogoVosFM-white.png',
     './img/mytuner_logo.png',
     './img/pause.gif',
     './img/peaple-1.jpg',
     './img/play.png',
-    './img/tarjeta.jpg'
   ]
 
 //durante la fase de instalación, generalmente se almacena en caché los activos estáticos
