@@ -2,7 +2,7 @@ const audio = document.getElementById("audio");
 const playPause = document.getElementById("play");
 
 // Establecer la URL de la transmisión de radio
-const radioUrl = "https://fdsfdsfdsf.radio12345.com/intro.mp3";
+const radioUrl = "http://uk15freenew.listen2myradio.com:27678/;stream.mp3";
 audio.src = radioUrl;
 
 function togglePlayPauseIcons() {
