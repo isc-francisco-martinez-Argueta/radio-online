@@ -55,7 +55,8 @@
 
     <!-- Estilos CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/styles.css?v=126" />
+    <link rel="stylesheet" href="css/styles.css?v=127" />
+    <link rel="stylesheet" href="css/pwa-install-card.css?v=127" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Red+Hat+Text:400,500,700&display=swap" />
 </head>
 
@@ -64,6 +65,69 @@
 <button class="scroll-top-btn hidden-scroll-top" id="top-btn" aria-label="Volver arriba">
     <span class="fas fa-angle-up" aria-hidden="true"></span>
 </button>
+
+<!-- PWA Install Card -->
+<div class="pwa-install-card" id="pwa-install-card" aria-live="polite" role="dialog" aria-labelledby="pwa-card-title" aria-hidden="true">
+    <button class="pwa-close-btn" id="pwa-close-btn" aria-label="Cerrar">
+        <i class="fas fa-times" aria-hidden="true"></i>
+    </button>
+
+    <div class="pwa-card-content">
+        <div class="pwa-icon-container">
+            <img src="img/icon-vos.png" alt="VOS FM Logo" class="pwa-icon" />
+            <div class="pwa-pulse-ring"></div>
+        </div>
+
+        <div class="pwa-text-content">
+            <h3 id="pwa-card-title" class="pwa-title">
+                <i class="fas fa-download" aria-hidden="true"></i>
+                Instala VOS FM
+            </h3>
+            <p class="pwa-description">
+                Escucha tu radio favorita sin abrir el navegador.
+                Instala nuestra app en tu dispositivo.
+            </p>
+
+            <div class="pwa-features">
+                <div class="pwa-feature">
+                    <i class="fas fa-bolt" aria-hidden="true"></i>
+                    <span>Acceso rápido</span>
+                </div>
+                <div class="pwa-feature">
+                    <i class="fas fa-signal" aria-hidden="true"></i>
+                    <span>Funciona offline</span>
+                </div>
+                <div class="pwa-feature">
+                    <i class="fas fa-mobile-alt" aria-hidden="true"></i>
+                    <span>Como app nativa</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="pwa-actions">
+            <button class="pwa-install-btn" id="pwa-install-btn" type="button">
+                <i class="fas fa-download" aria-hidden="true"></i>
+                <span class="btn-text">Instalar App</span>
+            </button>
+            <button class="pwa-later-btn" id="pwa-later-btn" type="button">
+                Más tarde
+            </button>
+        </div>
+
+        <!-- iOS Instructions (hidden by default) -->
+        <div class="pwa-ios-instructions" id="pwa-ios-instructions" style="display: none;">
+            <p class="ios-title">
+                <i class="fab fa-apple" aria-hidden="true"></i>
+                Para instalar en iOS:
+            </p>
+            <ol class="ios-steps">
+                <li>Toca el botón <i class="fas fa-share" aria-hidden="true"></i> en Safari</li>
+                <li>Selecciona "Añadir a pantalla de inicio"</li>
+                <li>Confirma tocando "Añadir"</li>
+            </ol>
+        </div>
+    </div>
+</div>
 
 <!-- Header -->
 <header id="header">
@@ -302,7 +366,8 @@
 <script defer src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>
 <script defer src="https://kit.fontawesome.com/35db202371.js" crossorigin="anonymous"></script>
-<script defer src="js/app.js?v=126"></script>
-<script src="js/modules.js?v=126" type="module"></script>
+<script defer src="js/app.js?v=127"></script>
+<script src="js/modules.js?v=127" type="module"></script>
+<script defer src="js/pwa-installer.js?v=127"></script>
 </body>
 </html>

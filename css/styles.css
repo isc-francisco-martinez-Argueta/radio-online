@@ -637,3 +637,420 @@ footer .footer-social-icons {
     outline: 3px solid var(--blue);
     outline-offset: 2px;
 }
+
+
+
+/* ===================================
+   PWA Installation Card Styles
+   =================================== */
+
+.pwa-install-card {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(150%);
+    max-width: 420px;
+    width: calc(100% - 40px);
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2),
+    0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+    padding: 24px;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    border: 2px solid rgba(43, 106, 181, 0.1);
+    backdrop-filter: blur(10px);
+}
+
+.pwa-install-card.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.pwa-install-card.hide {
+    transform: translateX(-50%) translateY(150%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Close Button */
+.pwa-close-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.05);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    color: #666;
+    z-index: 2;
+}
+
+.pwa-close-btn:hover {
+    background: rgba(236, 56, 56, 0.1);
+    color: var(--red);
+    transform: rotate(90deg);
+}
+
+/* Card Content */
+.pwa-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Icon Container */
+.pwa-icon-container {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+}
+
+.pwa-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    position: relative;
+    z-index: 1;
+    object-fit: cover;
+}
+
+/* Pulse Ring Animation */
+.pwa-pulse-ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80px;
+    height: 80px;
+    border: 3px solid var(--blue);
+    border-radius: 20px;
+    animation: pulse-ring 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
+    opacity: 0;
+}
+
+@keyframes pulse-ring {
+    0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.5;
+    }
+    50% {
+        opacity: 0.3;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.3);
+        opacity: 0;
+    }
+}
+
+/* Text Content */
+.pwa-text-content {
+    text-align: center;
+}
+
+.pwa-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--black);
+    margin: 0 0 12px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.pwa-title i {
+    color: var(--blue);
+    font-size: 22px;
+}
+
+.pwa-description {
+    font-size: 15px;
+    color: #666;
+    line-height: 1.6;
+    margin: 0 0 16px 0;
+}
+
+/* Features */
+.pwa-features {
+    display: flex;
+    justify-content: space-around;
+    gap: 12px;
+    margin-top: 16px;
+}
+
+.pwa-feature {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    flex: 1;
+}
+
+.pwa-feature i {
+    font-size: 24px;
+    color: var(--blue);
+}
+
+.pwa-feature span {
+    font-size: 12px;
+    color: #666;
+    font-weight: 500;
+    text-align: center;
+}
+
+/* Actions */
+.pwa-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.pwa-install-btn {
+    width: 100%;
+    padding: 14px 24px;
+    background: linear-gradient(135deg, var(--blue) 0%, #1e5a9e 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    box-shadow: 0 4px 12px rgba(43, 106, 181, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.pwa-install-btn::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
+}
+
+.pwa-install-btn:hover::before {
+    width: 300px;
+    height: 300px;
+}
+
+.pwa-install-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(43, 106, 181, 0.4);
+}
+
+.pwa-install-btn:active {
+    transform: translateY(0);
+}
+
+.pwa-install-btn i {
+    font-size: 18px;
+    position: relative;
+    z-index: 1;
+}
+
+.pwa-install-btn .btn-text {
+    position: relative;
+    z-index: 1;
+}
+
+.pwa-later-btn {
+    width: 100%;
+    padding: 12px 24px;
+    background: transparent;
+    color: #666;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.pwa-later-btn:hover {
+    background: #f5f5f5;
+    border-color: #d0d0d0;
+    color: var(--black);
+}
+
+/* iOS Instructions */
+.pwa-ios-instructions {
+    margin-top: 20px;
+    padding: 16px;
+    background: linear-gradient(135deg, #f0f7ff 0%, #e8f4ff 100%);
+    border-radius: 12px;
+    border-left: 4px solid var(--blue);
+}
+
+.ios-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--black);
+    margin: 0 0 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.ios-title i {
+    font-size: 18px;
+}
+
+.ios-steps {
+    margin: 0;
+    padding-left: 24px;
+    color: #555;
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.ios-steps li {
+    margin-bottom: 8px;
+}
+
+.ios-steps i {
+    color: var(--blue);
+    font-weight: bold;
+}
+
+/* Responsive Design */
+@media only screen and (max-width: 480px) {
+    .pwa-install-card {
+        bottom: 10px;
+        width: calc(100% - 20px);
+        padding: 20px;
+        border-radius: 16px;
+    }
+
+    .pwa-title {
+        font-size: 20px;
+    }
+
+    .pwa-description {
+        font-size: 14px;
+    }
+
+    .pwa-features {
+        gap: 8px;
+    }
+
+    .pwa-feature i {
+        font-size: 20px;
+    }
+
+    .pwa-feature span {
+        font-size: 11px;
+    }
+
+    .pwa-install-btn {
+        padding: 12px 20px;
+        font-size: 15px;
+    }
+}
+
+/* Dark Mode Support (Optional) */
+@media (prefers-color-scheme: dark) {
+    .pwa-install-card {
+        background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+
+    .pwa-title,
+    .ios-title {
+        color: #ffffff;
+    }
+
+    .pwa-description,
+    .pwa-feature span {
+        color: #b0b0b0;
+    }
+
+    .pwa-close-btn {
+        background: rgba(255, 255, 255, 0.05);
+        color: #b0b0b0;
+    }
+
+    .pwa-later-btn {
+        color: #b0b0b0;
+        border-color: #404040;
+    }
+
+    .pwa-later-btn:hover {
+        background: #333;
+        border-color: #555;
+        color: #ffffff;
+    }
+
+    .pwa-ios-instructions {
+        background: linear-gradient(135deg, #1e3a5f 0%, #1a2f4f 100%);
+    }
+
+    .ios-steps {
+        color: #b0b0b0;
+    }
+}
+
+/* Animation for appearing */
+@keyframes slideUpBounce {
+    0% {
+        transform: translateX(-50%) translateY(150%);
+        opacity: 0;
+    }
+    60% {
+        transform: translateX(-50%) translateY(-10px);
+        opacity: 1;
+    }
+    80% {
+        transform: translateX(-50%) translateY(5px);
+    }
+    100% {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+}
+
+.pwa-install-card.animate-in {
+    animation: slideUpBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+}
+
+/* Loading State */
+.pwa-install-btn.loading {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.pwa-install-btn.loading .btn-text::after {
+    content: '';
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    margin-left: 8px;
+    border: 2px solid #ffffff;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
