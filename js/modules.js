@@ -9,3 +9,9 @@ d.addEventListener("DOMContentLoaded", (e)=>{
     scrollTopButton("#top-btn");
     
 })
+
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => {
+        navigator.serviceWorker.register("./sw.js").catch(() => {});
+    });
+}
