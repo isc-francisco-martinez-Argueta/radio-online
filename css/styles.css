@@ -194,15 +194,20 @@ a {
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
-    transition: all 0.3s ease-out;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+
+    /* Transiciones suaves */
+    transition: all 0.3s ease-out,
+    visibility 0.3s,
+    opacity 0.3s;
 }
 
 .scroll-top-btn > span {
     font-size: 30px;
     font-weight: bold;
     color: #ffffff;
+    /* Evitar que el span capture clics */
+    pointer-events: none;
 }
 
 .scroll-top-btn:hover {
@@ -211,11 +216,15 @@ a {
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
 }
 
+.scroll-top-btn:active {
+    transform: translateY(-1px);
+}
+
 .hidden-scroll-top {
     visibility: hidden;
     opacity: 0;
+    pointer-events: none; /* Evitar clics cuando está oculto */
 }
-
 /** IMG Header **/
 #video_background {
     position: absolute;
