@@ -1,101 +1,159 @@
 const audio = document.getElementById("audio");
 const playPause = document.getElementById("play");
 
-// Establecer la URL de la transmisión de radio (puede ser null si no hay radio disponible)
-const radioUrl = "https://vosfm.com.mx/shoutcast-stream/;stream.mp3"; // Cambia a null para probar sin radio
-const playlist = []; // Lista de reproducción de canciones (vacía para este caso)
+// Configuración
+const CONFIG = {
+    radioUrl: "https://vosfm.com.mx/shoutcast-stream/;stream.mp3",
+    playlist: [],
+    reconnectAttempts: 3,
+    reconnectDelay: 2000
+};
 
-let currentTrackIndex = 0; // Índice de la pista actual en la lista de reproducción
-let isRadioPlaying = false; // Indica si está reproduciendo la radio o la lista de música
+// Estado de la aplicación
+const state = {
+    currentTrackIndex: 0,
+    isRadioPlaying: false,
+    reconnectCount: 0
+};
 
-// Función para actualizar los íconos de play/pause según el estado del audio
+// Utilidad para mostrar mensajes de error
+function showError(message) {
+    console.error(message);
+    // Opcional: mostrar un toast o notificación al usuario
+    // Puedes agregar un elemento HTML para esto
+}
+
+// Función para actualizar los íconos de play/pause
 function updatePlayPauseIcons() {
-  if (!radioUrl && playlist.length === 0) {
-    // Si no hay radio ni lista de reproducción, desactivar el botón
-    playPause.querySelector(".pause-btn").classList.add("hide");
-    playPause.querySelector(".play-btn").classList.remove("hide");
-    playPause.classList.remove("red");
-    playPause.classList.add("blue");
-    playPause.disabled = true; // Desactivar el botón
-    return;
-  }
+    const hasContent = CONFIG.radioUrl || CONFIG.playlist.length > 0;
 
-  if (audio.paused || audio.ended) {
-    // Si el audio está pausado o ha terminado, mostrar el ícono de play
-    playPause.querySelector(".pause-btn").classList.add("hide");
-    playPause.querySelector(".play-btn").classList.remove("hide");
-    playPause.classList.remove("red");
-    playPause.classList.add("blue");
-  } else {
-    // Si el audio está reproduciéndose, mostrar el ícono de pause
-    playPause.querySelector(".pause-btn").classList.remove("hide");
-    playPause.querySelector(".play-btn").classList.add("hide");
-    playPause.classList.add("red");
-    playPause.classList.remove("blue");
-  }
+    if (!hasContent) {
+        playPause.querySelector(".pause-btn").classList.add("hide");
+        playPause.querySelector(".play-btn").classList.remove("hide");
+        playPause.classList.remove("red");
+        playPause.classList.add("blue");
+        playPause.disabled = true;
+        return;
+    }
+
+    const isPaused = audio.paused || audio.ended;
+
+    playPause.querySelector(".pause-btn").classList.toggle("hide", isPaused);
+    playPause.querySelector(".play-btn").classList.toggle("hide", !isPaused);
+    playPause.classList.toggle("red", !isPaused);
+    playPause.classList.toggle("blue", isPaused);
+    playPause.disabled = false;
+}
+
+// Función para cargar y reproducir una pista
+async function loadAndPlayTrack(trackUrl) {
+    try {
+        audio.src = trackUrl;
+        await audio.play();
+    } catch (error) {
+        showError("Error al reproducir la pista: " + error.message);
+        handlePlaybackError();
+    }
+}
+
+// Manejo de errores de reproducción
+function handlePlaybackError() {
+    if (state.isRadioPlaying && state.reconnectCount < CONFIG.reconnectAttempts) {
+        state.reconnectCount++;
+        console.log(`Intento de reconexión ${state.reconnectCount}/${CONFIG.reconnectAttempts}`);
+
+        setTimeout(() => {
+            loadAndPlayTrack(CONFIG.radioUrl);
+        }, CONFIG.reconnectDelay);
+    } else {
+        audio.pause();
+        updatePlayPauseIcons();
+        state.reconnectCount = 0;
+    }
 }
 
 // Función para manejar el final de la reproducción
 function handleEndOfAudio() {
-  if (isRadioPlaying) {
-    // Si es la radio, simplemente pausa y reinicia el botón
-    audio.pause();
-    updatePlayPauseIcons();
-  } else {
-    // Si es la lista de reproducción, reproduce la siguiente canción
-    currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
-    loadAndPlayTrack(playlist[currentTrackIndex]);
-  }
-}
-
-// Función para cargar y reproducir una pista específica
-function loadAndPlayTrack(trackUrl) {
-  audio.src = trackUrl;
-  audio.play().catch((error) => {
-    console.error("Error al reproducir la pista:", error);
-  });
+    if (state.isRadioPlaying) {
+        audio.pause();
+        updatePlayPauseIcons();
+    } else if (CONFIG.playlist.length > 0) {
+        state.currentTrackIndex = (state.currentTrackIndex + 1) % CONFIG.playlist.length;
+        loadAndPlayTrack(CONFIG.playlist[state.currentTrackIndex]);
+    }
 }
 
 // Evento de clic en el botón de play/pause
-playPause.addEventListener("click", () => {
-  if (!radioUrl && playlist.length === 0) {
-    // Si no hay radio ni lista de reproducción, no hacer nada
-    return;
-  }
-
-  if (audio.paused || audio.ended) {
-    if (radioUrl) {
-      // Reproducir la radio si está disponible
-      audio.src = radioUrl;
-      isRadioPlaying = true;
-    } else {
-      // Reproducir la lista de reproducción si no hay radio
-      loadAndPlayTrack(playlist[currentTrackIndex]);
-      isRadioPlaying = false;
+playPause.addEventListener("click", async () => {
+    if (!CONFIG.radioUrl && CONFIG.playlist.length === 0) {
+        return;
     }
-    audio.play();
-  } else {
-    // Pausar la reproducción
-    audio.pause();
-  }
+
+    if (audio.paused || audio.ended) {
+        state.reconnectCount = 0; // Resetear contador de reconexión
+
+        if (CONFIG.radioUrl) {
+            state.isRadioPlaying = true;
+            await loadAndPlayTrack(CONFIG.radioUrl);
+        } else {
+            state.isRadioPlaying = false;
+            await loadAndPlayTrack(CONFIG.playlist[state.currentTrackIndex]);
+        }
+    } else {
+        audio.pause();
+    }
 });
 
-// Eventos del audio
+// Event Listeners del audio
 audio.addEventListener("play", updatePlayPauseIcons);
 audio.addEventListener("pause", updatePlayPauseIcons);
 audio.addEventListener("ended", handleEndOfAudio);
+audio.addEventListener("error", handlePlaybackError);
 
-// Cuando se carga la página, asegurarse de que el reproductor esté en modo inicial
+// Inicialización cuando se carga la página
 window.addEventListener("DOMContentLoaded", () => {
-  audio.pause(); // Asegurarse de que el audio no se reproduzca automáticamente
-  updatePlayPauseIcons(); // Actualizar los íconos al estado correcto
+    audio.pause();
+    updatePlayPauseIcons();
 });
 
-//video
-
+// Manejo del video de fondo
 document.addEventListener('DOMContentLoaded', function() {
-  var video = document.getElementById('video_background');
-  video.play().catch(error => {
-      console.log('Error al reproducir el video automáticamente:', error);
-  });
+    const video = document.getElementById('video_background');
+
+    if (video) {
+        // Intentar reproducir el video
+        const playPromise = video.play();
+
+        if (playPromise !== undefined) {
+            playPromise
+                .then(() => {
+                    console.log('Video reproduciéndose automáticamente');
+                })
+                .catch(error => {
+                    console.log('No se pudo reproducir el video automáticamente:', error);
+                    // El video se reproducirá cuando el usuario interactúe con la página
+                });
+        }
+    }
 });
+
+// Prevenir problemas de reproducción en dispositivos móviles
+if ('mediaSession' in navigator) {
+    navigator.mediaSession.metadata = new MediaMetadata({
+        title: 'VOS FM 91.3',
+        artist: 'Radio en Vivo',
+        album: 'Bochil, Chiapas, México',
+        artwork: [
+            { src: 'img/icon-vos.png', sizes: '192x192', type: 'image/png' },
+            { src: 'img/icon-vos.png', sizes: '512x512', type: 'image/png' }
+        ]
+    });
+
+    navigator.mediaSession.setActionHandler('play', () => {
+        playPause.click();
+    });
+
+    navigator.mediaSession.setActionHandler('pause', () => {
+        playPause.click();
+    });
+}
