@@ -121,6 +121,16 @@ a {
     background-size: cover;
 }
 
+/* Mientras conecta/buferiza: pulso suave para indicar actividad */
+.player__btn.loading {
+    animation: btn-loading 1s ease-in-out infinite;
+}
+
+@keyframes btn-loading {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.55; transform: scale(0.94); }
+}
+
 .hide {
     display: none;
 }

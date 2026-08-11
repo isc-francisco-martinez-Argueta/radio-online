@@ -1,4 +1,4 @@
-const CACHE_VERSION = "v1";
+const CACHE_VERSION = "v4";
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const HTML_CACHE = `html-${CACHE_VERSION}`;
 
@@ -6,7 +6,6 @@ const PRECACHE_ASSETS = [
   "/",
   "/index.html",
   "/css/styles.css",
-  "/css/estilos.css",
   "/js/app.js",
   "/js/modules.js",
   "/js/DOM/boton-scroll.js",
@@ -52,12 +51,18 @@ function isRadioStream(url) {
   return /shoutcast-stream/.test(url);
 }
 
+function isMusic(url) {
+  // Audio de respaldo y su lista: siempre desde la red, sin cachear.
+  return /\/musica\//.test(url);
+}
+
 self.addEventListener("fetch", (event) => {
   const { request } = event;
   const url = request.url;
 
-  if (isRadioStream(url)) {
-    event.respondWith(fetch(request));
+  // No interceptar el stream de radio ni el audio de respaldo: dejar que
+  // el navegador los maneje evita errores "Failed to fetch" y datos obsoletos.
+  if (isRadioStream(url) || isMusic(url)) {
     return;
   }
 

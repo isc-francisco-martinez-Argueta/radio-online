@@ -1,18 +1,32 @@
 const d = document;
 
+const CLOCK_OPTIONS = {
+    timeZone: "America/Mexico_City",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: true,
+};
+
 export function digitalClock(clock) {
-    setInterval(() => {
-        // Obtener la hora actual en la zona horaria de Ciudad de México
-        let options = {
-            timeZone: 'America/Mexico_City',
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hour12: true
-        };
-        let clockHour = new Date().toLocaleTimeString('en-US', options);
-        
-        // Mostrar la hora en el elemento especificado
-        d.querySelector(clock).innerHTML = `<h6 class="p-0 m-0">${clockHour}</h6>`;
-    }, 1000);
+    const container = d.querySelector(clock);
+    if (!container) {
+        console.warn(`digitalClock: no se encontró el elemento "${clock}"`);
+        return;
+    }
+
+    // Reutilizar el <h6> existente en vez de reescribir innerHTML cada segundo
+    let output = container.querySelector("h6");
+    if (!output) {
+        output = d.createElement("h6");
+        output.className = "p-0 m-0";
+        container.appendChild(output);
+    }
+
+    const render = () => {
+        output.textContent = new Date().toLocaleTimeString("en-US", CLOCK_OPTIONS);
+    };
+
+    render();
+    setInterval(render, 1000);
 }
