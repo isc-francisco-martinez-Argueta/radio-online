@@ -25,15 +25,39 @@ deshabilitado automáticamente. Para reconfigurar, borra `data/credentials.php`.
 
 ## 3. Uso normal
 
-Entra a `https://vosfm.com.mx/TU-CARPETA/` → inicia sesión → sube o elimina
-canciones (MP3, M4A, AAC, OGG; máx. 25 MB). Cada subida actualiza
+Entra a `https://vosfm.com.mx/TU-CARPETA/` → inicia sesión → gestiona grupos y
+canciones (MP3, M4A, AAC, OGG; máx. 25 MB). Cada cambio actualiza
 `/musica/playlist.json`, que la página pública lee sola.
 
-## 4. Cómo funciona el respaldo
+## 4. Grupos de reproducción
 
-`js/app.js` intenta primero el stream. Si falla tras 3 reintentos, cambia solo
-a la lista local y la reproduce en bucle. Cuando el visitante vuelve a pulsar
-play, intenta de nuevo el stream primero.
+La música de respaldo se organiza en **grupos** que tú creas con el nombre que
+quieras (ej. «Canciones 1», «Comerciales 1», «Canciones 2»…).
+
+- **Activar / Desactivar:** cada grupo se puede activar o desactivar. Solo los
+  grupos activos entran en la reproducción; los inactivos se saltan sin
+  borrarse.
+- **Orden = secuencia:** los grupos activos suenan **en secuencia, de arriba
+  hacia abajo**, en el orden que les des con las flechas ▲▼. Al terminar el
+  último, vuelve a empezar en bucle.
+- **Orden dentro del grupo:** las pistas de cada grupo también se reordenan con
+  ▲▼ y suenan en ese orden.
+- **Subir:** al subir una canción eliges a qué grupo va.
+
+Ejemplo: «Canciones 1» → «Comerciales 1» → «Canciones 2» → «Comerciales 2»,
+todos activos y en ese orden, reproduce grupo por grupo intercalando música y
+comerciales. Si no quieres que salgan los comerciales, desactiva ese grupo.
+
+Por dentro: la estructura de grupos vive en `data/library.php`, y el panel
+regenera `/musica/playlist.json` como la concatenación de las pistas de todos
+los grupos activos, en orden. Esa es la lista que consume la web.
+
+## 5. Cómo funciona el respaldo
+
+`js/app.js` intenta primero el stream en vivo. Si falla tras varios reintentos,
+cambia solo a la lista local (los grupos activos) y la reproduce en secuencia y
+en bucle. Cuando el visitante vuelve a pulsar play, intenta de nuevo el stream
+primero.
 
 ## Seguridad incluida
 

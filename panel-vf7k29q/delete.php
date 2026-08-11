@@ -15,23 +15,27 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !csrf_check()) {
 // Solo el nombre base, nunca rutas (evita path traversal)
 $target = basename((string) ($_POST['file'] ?? ''));
 
-$tracks = load_playlist();
-$kept = [];
+$lib = load_library();
 $found = false;
-foreach ($tracks as $t) {
-    if (($t['file'] ?? '') === $target && $target !== '') {
-        $found = true;
-        $path = rtrim($c['music_dir'], '/') . '/' . $target;
-        if (is_file($path)) {
-            @unlink($path);
+
+foreach ($lib['groups'] as $gid => $group) {
+    $kept = [];
+    foreach ($group['tracks'] as $t) {
+        if (($t['file'] ?? '') === $target && $target !== '') {
+            $found = true;
+            $path = rtrim($c['music_dir'], '/') . '/' . $target;
+            if (is_file($path)) {
+                @unlink($path);
+            }
+            continue; // no conservar
         }
-        continue; // no conservar
+        $kept[] = $t;
     }
-    $kept[] = $t;
+    $lib['groups'][$gid]['tracks'] = $kept;
 }
 
 if ($found) {
-    save_playlist($kept);
+    save_library($lib);
     $_SESSION['flash'] = 'Canción eliminada.';
 } else {
     $_SESSION['flash'] = 'No se encontró la canción.';

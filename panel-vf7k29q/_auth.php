@@ -55,6 +55,10 @@ function csrf_check(): bool {
 // --- Datos persistidos como archivos PHP (no legibles como texto) ---
 function load_data(string $file, array $default = []): array {
     if (is_file($file)) {
+        // Evita que OPcache sirva una versión vieja del archivo recién escrito.
+        if (function_exists('opcache_invalidate')) {
+            @opcache_invalidate($file, true);
+        }
         $data = include $file;
         return is_array($data) ? $data : $default;
     }
@@ -68,6 +72,10 @@ function save_data(string $file, array $data): void {
     }
     $php = "<?php return " . var_export($data, true) . ";\n";
     file_put_contents($file, $php, LOCK_EX);
+    // Invalida el caché de OPcache para que el próximo include lea lo recién guardado.
+    if (function_exists('opcache_invalidate')) {
+        @opcache_invalidate($file, true);
+    }
 }
 
 // --- Límite de intentos de login (por IP) ---
@@ -107,20 +115,57 @@ function clear_failed_login(): void {
     save_data($c['attempts_file'], $a);
 }
 
-// --- Lectura/escritura de la lista de reproducción pública ---
-function load_playlist(): array {
-    $c = cfg();
-    if (is_file($c['playlist_file'])) {
-        $j = json_decode((string) file_get_contents($c['playlist_file']), true);
-        if (is_array($j) && isset($j['tracks']) && is_array($j['tracks'])) {
-            return $j['tracks'];
-        }
-    }
-    return [];
+// --- Librería de grupos ---------------------------------------------------
+// Estructura:
+//   [ 'groups' => [ 'grp_xxx' => ['name'=>'...', 'enabled'=>true, 'tracks'=>[ {file,url,title,added}, ... ]] ] ]
+// Los grupos ACTIVOS (enabled) se reproducen en secuencia, respetando el orden
+// de los grupos y el de las pistas dentro de cada grupo.
+
+function new_group_id(): string {
+    return 'grp_' . bin2hex(random_bytes(4));
 }
 
-function save_playlist(array $tracks): void {
+function load_library(): array {
     $c = cfg();
+    $lib = load_data($c['library']);
+
+    // Inicializar con un grupo por defecto si está vacía. Id fijo ('grp_default')
+    // para que sea estable aunque library.php no exista todavía.
+    if (empty($lib['groups']) || !is_array($lib['groups'])) {
+        $lib = ['groups' => ['grp_default' => ['name' => 'Música', 'enabled' => true, 'tracks' => []]]];
+    }
+
+    // Normalizar cada grupo: asegurar 'enabled' y 'tracks'.
+    foreach ($lib['groups'] as $gid => $g) {
+        if (!isset($g['enabled'])) {
+            $lib['groups'][$gid]['enabled'] = true;
+        }
+        if (!isset($g['tracks']) || !is_array($g['tracks'])) {
+            $lib['groups'][$gid]['tracks'] = [];
+        }
+    }
+    unset($lib['active']); // campo antiguo (modelo de un solo grupo): ya no se usa
+    return $lib;
+}
+
+function save_library(array $lib): void {
+    $c = cfg();
+    save_data($c['library'], $lib);
+    publish_playlist($lib); // regenera el playlist.json público
+}
+
+// Escribe en musica/playlist.json la concatenación de TODOS los grupos activos,
+// en el orden de los grupos y de sus pistas. Eso define la secuencia de reproducción.
+function publish_playlist(array $lib): void {
+    $c = cfg();
+    $tracks = [];
+    foreach ($lib['groups'] as $g) {
+        if (!empty($g['enabled'])) {
+            foreach ($g['tracks'] as $t) {
+                $tracks[] = $t;
+            }
+        }
+    }
     $json = json_encode(
         ['tracks' => array_values($tracks)],
         JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES

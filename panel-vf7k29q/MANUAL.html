@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Manual · Música de respaldo VOS FM</title>
+<style>
+  :root{
+    --bg:#0f1720; --card:#161f2b; --line:#2b3947; --text:#e6edf3;
+    --muted:#9db8d6; --accent:#2b6ab5; --ok:#1f3b2a; --okText:#b4ffcf; --danger:#8a2b3a;
+  }
+  *{box-sizing:border-box}
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--text);margin:0;line-height:1.6}
+  .wrap{max-width:820px;margin:0 auto;padding:2rem 1.25rem 4rem}
+  header.top{text-align:center;margin-bottom:2rem}
+  header.top h1{font-size:1.6rem;margin:0 0 .4rem}
+  header.top p{color:var(--muted);margin:0}
+  h2{font-size:1.2rem;margin:2.2rem 0 .8rem;padding-bottom:.4rem;border-bottom:1px solid var(--line)}
+  h3{font-size:1.02rem;margin:1.4rem 0 .5rem;color:#c9d6e5}
+  p{margin:.5rem 0}
+  a{color:var(--muted)}
+  code{background:#0b1119;border:1px solid var(--line);border-radius:5px;padding:.1rem .4rem;font-size:.9em}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:1.1rem 1.25rem;margin:1rem 0}
+  .steps{counter-reset:step;list-style:none;padding:0;margin:0}
+  .steps>li{position:relative;padding:.6rem 0 .6rem 3rem;border-bottom:1px solid #22303d}
+  .steps>li:last-child{border-bottom:0}
+  .steps>li::before{
+    counter-increment:step;content:counter(step);
+    position:absolute;left:0;top:.55rem;width:2rem;height:2rem;border-radius:50%;
+    background:var(--accent);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:.9rem
+  }
+  .pill{display:inline-block;border-radius:999px;padding:.1rem .55rem;font-size:.8rem;font-weight:600;white-space:nowrap}
+  .pill.btn{background:var(--accent);color:#fff}
+  .pill.ok{background:var(--ok);color:var(--okText)}
+  .pill.off{background:#332027;color:#e0a0a0}
+  .pill.danger{background:var(--danger);color:#fff}
+  .pill.ghost{background:transparent;border:1px solid var(--accent);color:var(--muted)}
+  .note{background:#12233a;border-left:4px solid var(--accent);padding:.7rem 1rem;border-radius:8px;margin:1rem 0;color:#cfe0f5}
+  .warn{background:#3a2a12;border-left:4px solid #d19a2b;padding:.7rem 1rem;border-radius:8px;margin:1rem 0;color:#f3e0bd}
+  .seq{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin:.8rem 0}
+  .seq .box{background:#0b1119;border:1px solid var(--line);border-radius:8px;padding:.5rem .8rem;font-weight:600}
+  .seq .arrow{color:var(--muted)}
+  .toc a{display:block;color:var(--muted);text-decoration:none;padding:.15rem 0}
+  kbd{background:#0b1119;border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;padding:.05rem .4rem;font-size:.85em}
+  @media print{
+    body{background:#fff;color:#000}
+    .card,.note,.warn,.seq .box,code,kbd{background:#fff;border-color:#ccc;color:#000}
+    a{color:#000}
+    .pill{border:1px solid #000;color:#000 !important;background:#eee !important}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <h1>Manual del panel · Música de respaldo</h1>
+  <p>Cómo crear grupos y subir música / comerciales para VOS FM</p>
+</header>
+
+<div class="card toc">
+  <strong>Contenido</strong>
+  <a href="#que-es">1. Qué hace este panel</a>
+  <a href="#entrar">2. Entrar al panel</a>
+  <a href="#crear-grupo">3. Crear un grupo de música (los 80)</a>
+  <a href="#subir">4. Subir canciones a un grupo</a>
+  <a href="#comerciales">5. Crear el grupo «Comerciales 1»</a>
+  <a href="#gruperas">6. Crear el grupo «Las más gruperas»</a>
+  <a href="#orden">7. Ordenar la secuencia y activar/desactivar</a>
+  <a href="#reordenar">8. Reordenar canciones dentro de un grupo</a>
+  <a href="#eliminar">9. Eliminar canciones o grupos</a>
+</div>
+
+<h2 id="que-es">1. Qué hace este panel</h2>
+<p>
+  Este panel administra la <strong>música de respaldo</strong>: lo que suena en la
+  página web cuando la transmisión en vivo (el stream) está apagada o falla.
+  La música se organiza en <strong>grupos</strong> que tú creas (por ejemplo
+  «Música de los 80» o «Comerciales 1»).
+</p>
+<p>
+  Los grupos marcados como <span class="pill ok">● Activo</span> se reproducen
+  <strong>en secuencia, de arriba hacia abajo</strong>. Cuando termina el último,
+  vuelve a empezar en bucle. Un grupo <span class="pill off">○ Inactivo</span> se
+  salta sin borrarse.
+</p>
+
+<h2 id="entrar">2. Entrar al panel</h2>
+<ul class="steps">
+  <li>Abre en el navegador la dirección de tu panel (la que te compartió tu
+      desarrollador), por ejemplo <code>https://vosfm.com.mx/panel-.../</code>.</li>
+  <li>Escribe tu <strong>usuario</strong> y <strong>contraseña</strong> y pulsa
+      <span class="pill btn">Entrar</span>.</li>
+  <li>Verás tres secciones: <strong>Grupos de reproducción</strong>,
+      <strong>Subir canción</strong> y <strong>Canciones</strong>.</li>
+</ul>
+<div class="note">
+  Al terminar, usa <span class="pill ghost">Cerrar sesión</span> (arriba a la
+  derecha), sobre todo si estás en una computadora compartida.
+</div>
+
+<h2 id="crear-grupo">3. Crear un grupo de música (los 80)</h2>
+<p>Vamos a crear el primer grupo con música ochentera.</p>
+<ul class="steps">
+  <li>En la tarjeta <strong>Grupos de reproducción</strong>, escribe en el campo
+      de texto el nombre: <code>Música de los 80</code>.</li>
+  <li>Pulsa <span class="pill btn">Crear grupo</span>.</li>
+  <li>Aparecerá en la lista de grupos como <span class="pill ok">● Activo</span>
+      (los grupos nuevos nacen activos).</li>
+</ul>
+
+<h2 id="subir">4. Subir canciones a un grupo</h2>
+<ul class="steps">
+  <li>Ve a la tarjeta <strong>Subir canción</strong>.</li>
+  <li>En <strong>«Añadir al grupo»</strong> elige <code>Música de los 80</code>
+      en el selector.</li>
+  <li>Pulsa el selector de archivo y elige una canción de tu computadora
+      (formatos: <strong>MP3, M4A, AAC, OGG</strong>; máximo 25 MB).</li>
+  <li>Pulsa <span class="pill btn">Subir</span>. Verás un aviso de confirmación
+      y la canción aparecerá dentro de su grupo en la sección
+      <strong>Canciones</strong>.</li>
+  <li>Repite para cada canción de los 80 que quieras agregar.</li>
+</ul>
+<div class="warn">
+  Si ves «No se pudo guardar el archivo en el servidor», es un permiso del
+  servidor; avísale a tu desarrollador (la carpeta de música necesita permiso de
+  escritura).
+</div>
+
+<h2 id="comerciales">5. Crear el grupo «Comerciales 1»</h2>
+<p>Ahora un grupo aparte solo para los comerciales.</p>
+<ul class="steps">
+  <li>En <strong>Grupos de reproducción</strong>, escribe <code>Comerciales 1</code>
+      y pulsa <span class="pill btn">Crear grupo</span>.</li>
+  <li>Ve a <strong>Subir canción</strong>, elige el grupo
+      <code>Comerciales 1</code> en «Añadir al grupo».</li>
+  <li>Sube ahí tus spots publicitarios, uno por uno, igual que las canciones.</li>
+</ul>
+<div class="note">
+  Tener los comerciales en su propio grupo te permite <strong>activarlos o
+  desactivarlos</strong> sin tocar la música, o cambiarlos de lugar en la
+  secuencia.
+</div>
+
+<h2 id="gruperas">6. Crear el grupo «Las más gruperas»</h2>
+<ul class="steps">
+  <li>En <strong>Grupos de reproducción</strong>, escribe
+      <code>Las más gruperas</code> y pulsa <span class="pill btn">Crear grupo</span>.</li>
+  <li>En <strong>Subir canción</strong> elige <code>Las más gruperas</code> y sube
+      esas canciones.</li>
+</ul>
+<p>Ya tienes tus tres grupos creados.</p>
+
+<h2 id="orden">7. Ordenar la secuencia y activar/desactivar</h2>
+<p>
+  El <strong>orden de los grupos</strong> (de arriba hacia abajo) es el orden en
+  que se reproducen. Usa las flechas <kbd>▲</kbd> <kbd>▼</kbd> a la izquierda de
+  cada grupo para moverlo.
+</p>
+<p>Por ejemplo, para intercalar música y comerciales, déjalos así:</p>
+<div class="seq">
+  <span class="box">Música de los 80</span><span class="arrow">→</span>
+  <span class="box">Comerciales 1</span><span class="arrow">→</span>
+  <span class="box">Las más gruperas</span><span class="arrow">↻</span>
+</div>
+<p>
+  Con ese orden y los tres <span class="pill ok">● Activo</span>, sonará primero
+  la música de los 80, luego los comerciales, luego las gruperas, y vuelve a
+  empezar.
+</p>
+<ul class="steps">
+  <li>Para <strong>quitar</strong> temporalmente un grupo del aire (por ejemplo
+      pausar los comerciales), pulsa <span class="pill ghost">Desactivar</span>
+      en ese grupo. Quedará <span class="pill off">○ Inactivo</span> y se saltará.</li>
+  <li>Para volver a incluirlo, pulsa <span class="pill ghost">Activar</span>.</li>
+</ul>
+<div class="note">
+  Cada cambio se aplica solo; la lista que oye la web se actualiza al instante.
+</div>
+
+<h2 id="reordenar">8. Reordenar canciones dentro de un grupo</h2>
+<p>
+  Dentro de cada grupo, las canciones suenan en el orden en que aparecen. Usa las
+  flechas <kbd>▲</kbd> <kbd>▼</kbd> junto a cada canción (en la sección
+  <strong>Canciones</strong>) para cambiar cuál va primero, segunda, etc.
+</p>
+
+<h2 id="eliminar">9. Eliminar canciones o grupos</h2>
+<ul class="steps">
+  <li>Para borrar una canción, pulsa <span class="pill danger">Eliminar</span>
+      junto a ella y confirma en la ventana.</li>
+  <li>Para borrar un grupo completo (y todas sus canciones), pulsa
+      <span class="pill danger">Eliminar</span> en la fila del grupo y confirma.</li>
+</ul>
+<div class="warn">
+  Eliminar borra los archivos del servidor y no se puede deshacer. Si solo
+  quieres pausar un grupo, <strong>desactívalo</strong> en vez de eliminarlo.
+</div>
+
+<p style="text-align:center;color:var(--muted);margin-top:2.5rem">
+  VOS FM 91.3 · Manual del panel de música de respaldo
+</p>
+
+</div>
+</body>
+</html>

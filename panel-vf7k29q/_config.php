@@ -31,4 +31,5 @@ return [
     // Almacenamiento en archivos PHP (nunca legibles como texto por URL)
     'attempts_file' => __DIR__ . '/data/attempts.php',
     'credentials'   => __DIR__ . '/data/credentials.php',
+    'library'       => __DIR__ . '/data/library.php', // grupos + grupo activo
 ];

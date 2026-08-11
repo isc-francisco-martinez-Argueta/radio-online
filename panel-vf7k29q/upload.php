@@ -19,6 +19,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !csrf_check()) {
     fail('Solicitud inválida.');
 }
 
+// Grupo destino
+$lib = load_library();
+$group = (string) ($_POST['group'] ?? array_key_first($lib['groups']));
+if (!isset($lib['groups'][$group])) {
+    fail('El grupo seleccionado no existe.');
+}
+
 if (empty($_FILES['song']) || ($_FILES['song']['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) {
     fail('No se recibió el archivo (¿supera el límite del servidor?).');
 }
@@ -61,14 +68,14 @@ if ($title === '') {
     $title = $safe;
 }
 
-// 5) Añadir a la lista
-$tracks = load_playlist();
-$tracks[] = [
+// 5) Añadir la pista al grupo elegido
+$lib['groups'][$group]['tracks'][] = [
     'file'  => $safe,
     'url'   => $c['music_url'] . '/' . $safe,
     'title' => $title,
     'added' => date('c'),
 ];
-save_playlist($tracks);
+save_library($lib); // republica el playlist.json si el grupo es el activo
 
-fail('Canción añadida a la lista de respaldo.');
+$nombre = $lib['groups'][$group]['name']; // index.php escapa el flash al mostrarlo
+fail("Canción añadida al grupo «{$nombre}».");
