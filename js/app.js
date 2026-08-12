@@ -41,6 +41,38 @@ async function loadPlaylist() {
     }
 }
 
+// --- Progreso guardado por usuario (localStorage) ---------------------------
+// Recuerda en qué canción se quedó el usuario para retomar ahí al reabrir.
+const STORAGE_KEY = "vosfm_fallback";
+
+// Firma de la lista: si el admin cambia/reordena canciones, el índice se reinicia
+// para no reproducir la pista equivocada.
+function playlistSignature() {
+    const n = CONFIG.playlist.length;
+    return `${n}|${CONFIG.playlist[0] || ""}|${CONFIG.playlist[n - 1] || ""}`;
+}
+
+function loadSavedIndex() {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return 0;
+        const o = JSON.parse(raw);
+        if (o.sig !== playlistSignature()) return 0; // la lista cambió → desde el inicio
+        const i = Number(o.index);
+        return Number.isInteger(i) && i >= 0 && i < CONFIG.playlist.length ? i : 0;
+    } catch (_) {
+        return 0;
+    }
+}
+
+function saveIndex(i) {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ index: i, sig: playlistSignature() }));
+    } catch (_) {
+        // localStorage no disponible (modo privado): se ignora.
+    }
+}
+
 /**
  * Dibuja el botón según la INTENCIÓN (encendido/apagado), no según cada
  * evento del audio. Esto evita el parpadeo play/pause durante la carga:
@@ -147,13 +179,14 @@ function handlePlaybackError() {
         return;
     }
 
-    // 2) Stream agotado: cambiar a la lista de respaldo si existe
+    // 2) Stream agotado: pasar a la lista, retomando donde se quedó el usuario
     if (state.mode === "radio" && CONFIG.playlist.length > 0) {
         console.log("Stream no disponible: reproduciendo lista local de respaldo.");
         state.mode = "playlist";
-        state.currentTrackIndex = 0;
+        state.currentTrackIndex = loadSavedIndex();
         state.playlistFailures = 0;
-        loadAndPlayTrack(CONFIG.playlist[0]);
+        saveIndex(state.currentTrackIndex);
+        loadAndPlayTrack(CONFIG.playlist[state.currentTrackIndex]);
         return;
     }
 
@@ -168,6 +201,7 @@ function handlePlaybackError() {
             return;
         }
         state.currentTrackIndex = (state.currentTrackIndex + 1) % CONFIG.playlist.length;
+        saveIndex(state.currentTrackIndex);
         state.reconnectTimer = setTimeout(() => {
             state.reconnectTimer = null;
             loadAndPlayTrack(CONFIG.playlist[state.currentTrackIndex]);
@@ -182,7 +216,9 @@ function handlePlaybackError() {
 // Al terminar una pista: en modo lista, avanzar en bucle
 function handleEndOfAudio() {
     if (state.mode === "playlist" && CONFIG.playlist.length > 0) {
+        // Avanzar; al pasar la última vuelve a 0 (terminó todo → reinicia).
         state.currentTrackIndex = (state.currentTrackIndex + 1) % CONFIG.playlist.length;
+        saveIndex(state.currentTrackIndex); // guardar progreso entre sesiones
         loadAndPlayTrack(CONFIG.playlist[state.currentTrackIndex]);
     } else {
         stopPlayback();
@@ -211,8 +247,9 @@ playPause.addEventListener("click", async () => {
         await loadAndPlayTrack(CONFIG.radioUrl);
     } else {
         state.mode = "playlist";
-        state.currentTrackIndex = 0;
-        await loadAndPlayTrack(CONFIG.playlist[0]);
+        state.currentTrackIndex = loadSavedIndex();
+        saveIndex(state.currentTrackIndex);
+        await loadAndPlayTrack(CONFIG.playlist[state.currentTrackIndex]);
     }
 });
 

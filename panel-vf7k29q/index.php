@@ -125,16 +125,27 @@ function order_control(string $action, array $hidden, bool $canUp, bool $canDown
 <style>
   :root{color-scheme:dark}
   *{box-sizing:border-box}
-  body{font-family:system-ui,sans-serif;background:#0f1720;color:#e6edf3;margin:0;padding:0}
-  header{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.5rem;padding:1rem 1.25rem;background:#161f2b;border-bottom:1px solid #2b3947}
-  header h1{font-size:1.05rem;margin:0}
+  body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#e6edf3;margin:0;padding:0;
+    background:radial-gradient(1100px 460px at 50% -12%, #17293f, transparent 62%), #0e151f}
+  header{position:sticky;top:0;z-index:30;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:.5rem;
+    padding:.9rem 1.5rem;background:rgba(18,26,37,.92);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+    border-bottom:1px solid #2b3947;box-shadow:0 8px 24px rgba(0,0,0,.28)}
+  header h1{font-size:1.05rem;margin:0;display:flex;align-items:center;gap:.55rem}
+  header h1::before{content:"";width:10px;height:10px;border-radius:50%;background:#2b6ab5;box-shadow:0 0 10px #2b6ab5}
   header a{color:#9db8d6;text-decoration:none;font-size:.9rem;white-space:nowrap}
   .header-links{display:flex;align-items:center;gap:1rem;flex-wrap:wrap}
   .help-link{display:inline-flex;align-items:center;gap:.35rem;border:1px solid #2b6ab5;border-radius:8px;padding:.35rem .7rem;color:#9db8d6}
   .help-link:hover{background:#12233a}
-  main{max-width:760px;margin:0 auto;padding:1.25rem}
-  .card{background:#161f2b;border:1px solid #2b3947;border-radius:12px;padding:1.25rem;margin-bottom:1.25rem}
-  .card h2{font-size:1rem;margin:0 0 1rem}
+  main{max-width:1140px;margin:0 auto;padding:1.5rem 1.25rem 3rem;display:grid;grid-template-columns:1fr;gap:1.25rem}
+  .card{background:#161f2b;border:1px solid #2b3947;border-radius:14px;padding:1.35rem 1.5rem;box-shadow:0 12px 32px rgba(0,0,0,.28)}
+  .card h2{font-size:1.02rem;margin:0 0 1rem;padding-bottom:.65rem;border-bottom:1px solid #22303d;display:flex;align-items:center;gap:.55rem}
+  .card h2::before{content:"";width:4px;height:1.05rem;border-radius:3px;background:linear-gradient(#3f8fe0,#2b6ab5)}
+  @media (min-width:900px){
+    main{grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);align-items:start}
+    .card--groups{grid-column:1;grid-row:1}
+    .card--upload{grid-column:2;grid-row:1;position:sticky;top:5rem}
+    .card--songs{grid-column:1 / -1;grid-row:2}
+  }
   input[type=file]{width:100%;padding:.6rem;border-radius:8px;border:1px solid #2b3947;background:#0f1720;color:#e6edf3}
   button{padding:.6rem 1rem;border:0;border-radius:8px;background:#2b6ab5;color:#fff;font-weight:600;cursor:pointer}
   button.danger{background:#8a2b3a}
@@ -190,6 +201,10 @@ function order_control(string $action, array $hidden, bool $canUp, bool $canDown
   .grouplist .chev{transition:transform .15s ease;color:#7d8da3;font-size:.9rem}
   .grouplist[open] .chev{transform:rotate(90deg)}
   .grouplist ul,.grouplist>.empty{padding:.25rem .85rem .5rem}
+  .track{transition:background .12s ease;border-radius:8px}
+  .track:hover{background:#1b2735}
+  .group-row{transition:background .12s ease;border-radius:8px}
+  .group-row:hover{background:#1a2634}
   @media (max-width:520px){
     main{padding:1rem}
     .card{padding:1rem}
@@ -210,7 +225,7 @@ function order_control(string $action, array $hidden, bool $canUp, bool $canDown
 </header>
 <main>
   <!-- Grupos -->
-  <div class="card">
+  <div class="card card--groups">
     <h2>Grupos de reproducción</h2>
     <p class="hint" style="margin-top:0">Los grupos <strong>activos</strong> se reproducen en secuencia, de arriba hacia abajo. Usa ▲▼ para ordenarlos. Desactiva un grupo para saltarlo.</p>
 
@@ -259,7 +274,7 @@ function order_control(string $action, array $hidden, bool $canUp, bool $canDown
   </div>
 
   <!-- Subir canción -->
-  <div class="card">
+  <div class="card card--upload">
     <h2>Subir canción</h2>
     <form class="upload" method="post" action="upload.php" enctype="multipart/form-data">
       <input type="hidden" name="csrf" value="<?= h(csrf_token()) ?>">
@@ -278,7 +293,7 @@ function order_control(string $action, array $hidden, bool $canUp, bool $canDown
   </div>
 
   <!-- Canciones por grupo -->
-  <div class="card">
+  <div class="card card--songs">
     <h2>Canciones</h2>
     <?php foreach ($groups as $gid => $g): ?>
       <details class="grouplist" open>
