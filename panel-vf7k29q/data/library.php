@@ -4,7 +4,7 @@
     'grp_828588a7' => 
     array (
       'name' => 'Musica',
-      'enabled' => false,
+      'enabled' => true,
       'tracks' => 
       array (
       ),

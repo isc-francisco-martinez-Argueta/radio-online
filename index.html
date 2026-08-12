@@ -135,14 +135,17 @@
                         id="play"
                         aria-label="Reproducir radio"
                         type="button">
-                    <span class="play-btn" aria-hidden="true"></span>
-                    <span class="pause-btn hide" aria-hidden="true"></span>
+                    <span class="play-btn" aria-hidden="true"><i class="fas fa-play"></i></span>
+                    <span class="pause-btn hide" aria-hidden="true"><i class="fas fa-pause"></i></span>
                 </button>
                 <div class="boxinforadio d-flex align-items-center">
                     <div class="horareproductor d-flex align-items-center justify-content-center">
                         <div id="reloj" aria-live="polite" aria-atomic="true">
                             <h6 class="p-0 m-0">00:00:00</h6>
                         </div>
+                    </div>
+                    <div class="eq" aria-hidden="true">
+                        <span></span><span></span><span></span><span></span>
                     </div>
                     <div class="scrolling-text" aria-label="Información de transmisión">
                         <span>EN VIVO VOSFM XHBCH DESDE BOCHIL, CHIAPAS, MÉXICO</span>
@@ -152,22 +155,18 @@
         </div>
     </nav>
 
-    <!-- Header Video -->
-    <video
-            src="img/headervideo1.mp4"
-            muted
-            loop
-            playsinline
-            preload="metadata"
-            poster="img/headervideo1.png"
-            id="video_background"
-            aria-label="Video de fondo"
-    >
-        Tu navegador no soporta el elemento de video.
-    </video>
-
     <!-- Header Content -->
     <div class="img-header">
+        <!-- Fondo: video inline (no abre el reproductor) con glass encima -->
+        <video class="hero-video" id="video_background"
+               autoplay muted loop playsinline webkit-playsinline x5-playsinline
+               preload="auto" poster="img/headervideo1.png"
+               disablepictureinpicture aria-label="Video de fondo">
+            <source src="img/headervideo1.mp4" type="video/mp4">
+            Tu navegador no soporta el elemento de video.
+        </video>
+        <div class="hero-glass" aria-hidden="true"></div>
+
         <!-- Social Media Icons -->
         <aside class="social-float" aria-label="Redes sociales">
             <div class="social-item">
@@ -201,7 +200,7 @@
                 </a>
             </div>
             <div class="social-item">
-                <a href="https://www.youtube.com/channel/UCvjFelhaLQx6wCDMLrxASIg"
+                <a href="https://www.youtube.com/@VOSFM"
                    target="_blank"
                    rel="noopener noreferrer"
                    aria-label="Visitar YouTube de VOS FM">

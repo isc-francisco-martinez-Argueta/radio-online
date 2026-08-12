@@ -4,7 +4,6 @@ const CLOCK_OPTIONS = {
     timeZone: "America/Mexico_City",
     hour: "2-digit",
     minute: "2-digit",
-    second: "2-digit",
     hour12: true,
 };
 

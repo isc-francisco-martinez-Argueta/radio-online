@@ -61,6 +61,12 @@ function renderButton() {
         "aria-label",
         active ? (state.loading ? "Conectando…" : "Detener radio") : "Reproducir radio"
     );
+
+    // Anima el ecualizador solo cuando realmente está sonando (no en carga).
+    const controls = document.getElementById("background");
+    if (controls) {
+        controls.classList.toggle("is-playing", active && !state.loading);
+    }
 }
 
 // Cargar y reproducir una fuente (stream o pista)
@@ -234,16 +240,17 @@ window.addEventListener("DOMContentLoaded", async () => {
     await loadPlaylist();
     renderButton();
 
-    // Video de fondo
+    // Video de fondo: reproducción inline y muteada (móvil no abre el reproductor)
     const video = document.getElementById("video_background");
     if (video) {
-        const playPromise = video.play();
-        if (playPromise !== undefined) {
-            playPromise.catch((error) => {
-                // Se reproducirá cuando el usuario interactúe con la página.
-                console.log("No se pudo reproducir el video automáticamente:", error);
-            });
-        }
+        video.muted = true;            // requerido para autoplay en iOS/Android
+        video.setAttribute("muted", "");
+        video.playsInline = true;
+        const tryPlayVideo = () => video.play().catch(() => {});
+        tryPlayVideo();
+        // Reintento en la primera interacción por si el navegador bloqueó el autoplay
+        document.addEventListener("touchstart", tryPlayVideo, { once: true, passive: true });
+        document.addEventListener("click", tryPlayVideo, { once: true });
     }
 });
 
