@@ -67,7 +67,7 @@
           "name": "VOS FM 91.3",
           "alternateName": ["VOSFM", "VOS FM", "Vos FM 91.3"],
           "url": "https://vosfm.com.mx/",
-          "logo": "https://vosfm.com.mx/img/icon_512.png",
+          "logo": "https://vosfm.com.mx/img/icon-vos.png",
           "image": "https://vosfm.com.mx/img/baner-listo.png",
           "description": "Estación de radio que informa, divierte y entretiene. Escúchanos por la frecuencia 91.3 FM y en vosfm.com.mx desde Bochil, Chiapas, México.",
           "slogan": "Lo que vos escuchas",
@@ -202,14 +202,23 @@
 
     <!-- Header Content -->
     <div class="img-header">
-        <!-- Fondo: video inline (no abre el reproductor) con glass encima -->
-        <video class="hero-video" id="video_background"
-               autoplay muted loop playsinline webkit-playsinline x5-playsinline
-               preload="auto" poster="img/headervideo1.png"
-               disablepictureinpicture aria-label="Video de fondo">
-            <source src="img/headervideo1.mp4" type="video/mp4">
-            Tu navegador no soporta el elemento de video.
-        </video>
+        <!-- Fondo: trazos neón (light-painting) + estrellas, con glass encima -->
+        <div class="hero-fx" aria-hidden="true">
+            <div class="stars"></div>
+            <svg class="streaks" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                <path class="streak" d="M-20,120 C120,40 200,220 340,120 S560,20 700,140 S940,60 1040,180"/>
+                <path class="streak" d="M60,520 C180,440 240,560 360,470 S560,540 700,460 S900,520 1010,440"/>
+                <path class="streak" d="M820,-10 C760,120 900,200 840,340 S900,520 800,610"/>
+                <path class="streak" d="M120,300 C220,240 260,380 380,320 S520,260 640,360"/>
+                <path class="streak" d="M480,-20 C520,120 420,180 500,300 S560,470 500,620"/>
+                <path class="streak" d="M980,420 C860,380 800,510 660,470 S460,520 360,470"/>
+                <path class="streak" d="M-10,340 C90,300 130,430 240,380 S380,320 470,400"/>
+                <path class="streak" d="M640,110 C710,50 800,140 760,230 S620,300 690,390"/>
+                <path class="streak" d="M280,560 C360,480 300,410 390,350 S470,270 420,190"/>
+                <path class="streak" d="M40,190 C120,150 150,270 250,220 S360,170 450,240"/>
+                <path class="streak" d="M560,540 C650,480 720,570 820,500 S960,470 1030,540"/>
+            </svg>
+        </div>
         <div class="hero-glass" aria-hidden="true"></div>
 
         <!-- Social Media Icons -->
@@ -259,7 +268,7 @@
         <!-- Welcome Section -->
         <div class="welcome">
             <h1>
-                <img src="img/logo.gif" class="logo" alt="Logo VOS FM 91.3" loading="eager" />
+                <img src="img/logo.gif" class="logo" alt="Logo VOS FM 91.3" width="600" height="338" loading="eager" />
             </h1>
             <a class="button-danger" href="#clientes" aria-label="Ver contenido abajo">
                 Ver abajo
@@ -316,7 +325,7 @@
                  aria-label="Carrusel de anuncios">
                 <div class="carousel-inner">
                     <div class="carousel-item active" data-bs-interval="4000">
-                        <img src="img/anunciate.png"
+                        <img src="img/anunciate.jpg"
                              class="d-block w-100"
                              alt="Anúnciate con nosotros - Primera promoción"
                              loading="lazy"
@@ -324,7 +333,7 @@
                              />
                     </div>
                     <div class="carousel-item" data-bs-interval="4000">
-                        <img src="img/anunciate2.png"
+                        <img src="img/anunciate2.jpg"
                              class="d-block w-100"
                              alt="Anúnciate con nosotros - Segunda promoción"
                              loading="lazy"
@@ -332,7 +341,7 @@
                              />
                     </div>
                     <div class="carousel-item" data-bs-interval="4000">
-                        <img src="img/anunciate3.png"
+                        <img src="img/anunciate3.jpg"
                              class="d-block w-100"
                              alt="Anúnciate con nosotros - Tercera promoción"
                              loading="lazy"

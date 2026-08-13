@@ -1,4 +1,4 @@
-const CACHE_VERSION = "v27";
+const CACHE_VERSION = "v33";
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const HTML_CACHE = `html-${CACHE_VERSION}`;
 
@@ -14,7 +14,7 @@ const PRECACHE_ASSETS = [
   "/img/logo.gif",
   "/img/mytuner_logo.png",
   "/img/logo-listener.png",
-  "/img/headervideo1.png",
+  "/img/headervideo1.jpg",
   "/manifest.webmanifest"
 ];
 
