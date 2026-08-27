@@ -18,8 +18,13 @@ const state = {
     playlistFailures: 0,   // fallos consecutivos en modo lista (evita bucle infinito)
     loading: false,        // true mientras se conecta/buferiza
     gen: 0,                // "generación" del intento actual (ignora errores rezagados)
-    reconnectTimer: null
+    reconnectTimer: null,
+    stallTimer: null        // detecta stream "colgado" (sin datos, sin error) en modo radio
 };
+
+// Cuánto esperar en "waiting" (buffering) antes de asumir que el stream se
+// cayó silenciosamente (conexión abierta pero sin datos) y pasar a la lista.
+const STALL_TIMEOUT = 15000;
 
 // Aviso informativo (p. ej. stream caído). No es un fallo crítico: la app
 // reintenta y, si hace falta, pasa a la lista local de respaldo.
@@ -153,9 +158,17 @@ function cancelReconnect() {
     }
 }
 
+function clearStallTimer() {
+    if (state.stallTimer) {
+        clearTimeout(state.stallTimer);
+        state.stallTimer = null;
+    }
+}
+
 // Detener por completo la reproducción y volver a estado apagado
 function stopPlayback() {
     cancelReconnect();
+    clearStallTimer();
     state.mode = "idle";
     state.loading = false;
     audio.pause();
@@ -258,18 +271,36 @@ playPause.addEventListener("click", async () => {
 // para no parpadear durante la conexión/buffer.
 audio.addEventListener("playing", () => {
     state.loading = false;
+    clearStallTimer();
     renderButton();
 });
 audio.addEventListener("waiting", () => {
     if (state.mode !== "idle") {
         state.loading = true;
         renderButton();
+        // El stream puede quedarse "colgado" (conexión abierta, sin datos) sin
+        // disparar nunca un error. Si tarda demasiado en volver a sonar, se
+        // trata como caído y se dispara el fallback a la lista local.
+        if (state.mode === "radio" && !state.stallTimer) {
+            const gen = state.gen;
+            state.stallTimer = setTimeout(() => {
+                state.stallTimer = null;
+                if (gen !== state.gen || state.mode !== "radio") return; // ya cambió de estado
+                console.warn("Stream sin datos por mucho tiempo: se asume caído.");
+                handlePlaybackError();
+            }, STALL_TIMEOUT);
+        }
     }
 });
 audio.addEventListener("ended", handleEndOfAudio);
-// Los fallos de carga se gestionan en el catch de loadAndPlayTrack (con control
-// de generación). Un listener global de "error" aquí dispararía también con
-// fuentes anteriores y rompería el cambio a la lista de respaldo.
+// Los fallos de carga iniciales se gestionan en el catch de loadAndPlayTrack.
+// Este listener cubre el resto: el stream ya estaba sonando y el navegador
+// reporta un error real (p. ej. el servidor cierra la conexión de golpe).
+audio.addEventListener("error", () => {
+    if (state.mode === "idle") return;
+    console.warn("Evento 'error' del elemento de audio.");
+    handlePlaybackError();
+});
 
 // Inicialización
 window.addEventListener("DOMContentLoaded", async () => {
