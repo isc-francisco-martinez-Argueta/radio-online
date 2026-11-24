@@ -1,4 +1,4 @@
-const CACHE_VERSION = "v42";
+const CACHE_VERSION = "v44";
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const HTML_CACHE = `html-${CACHE_VERSION}`;
 
@@ -11,6 +11,7 @@ const PRECACHE_ASSETS = [
   "/js/DOM/actualizar-app.js",
   "/js/DOM/boton-scroll.js",
   "/js/DOM/reloj.js",
+  "/js/DOM/chat-flotante.js",
   "/img/icon-512.png",
   "/img/icon-192.png",
   "/img/favicon-32.png",

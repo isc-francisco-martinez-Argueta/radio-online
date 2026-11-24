@@ -407,6 +407,41 @@
     </p>
 </div>
 
+<!-- Chat flotante: WhatsApp + Messenger -->
+<div class="chat-float" id="chat-float">
+    <div class="chat-menu" id="chat-menu" role="menu" aria-labelledby="chat-toggle" hidden>
+        <p class="chat-menu__title">¿Quieres saludar o pedir una canción?</p>
+        <a class="chat-option chat-option--wa"
+           role="menuitem"
+           href="https://wa.link/cwxkne"
+           target="_blank"
+           rel="noopener noreferrer">
+            <i class="fab fa-whatsapp" aria-hidden="true"></i>
+            <span>
+                <strong>WhatsApp</strong>
+                <small>Mensajes y saludos en cabina</small>
+            </span>
+        </a>
+        <a class="chat-option chat-option--fb"
+           role="menuitem"
+           href="https://m.me/vosfmoficial"
+           target="_blank"
+           rel="noopener noreferrer">
+            <i class="fab fa-facebook-messenger" aria-hidden="true"></i>
+            <span>
+                <strong>Messenger</strong>
+                <small>Escríbenos por Facebook</small>
+            </span>
+        </a>
+    </div>
+    <button class="chat-toggle" id="chat-toggle" type="button"
+            aria-haspopup="true" aria-expanded="false" aria-controls="chat-menu"
+            aria-label="Abrir chat con la cabina">
+        <span class="chat-toggle__open" aria-hidden="true"><i class="fas fa-comment-dots"></i></span>
+        <span class="chat-toggle__close" aria-hidden="true"><i class="fas fa-times"></i></span>
+    </button>
+</div>
+
 <!-- Scripts -->
 <script defer src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js" integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js" integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous"></script>

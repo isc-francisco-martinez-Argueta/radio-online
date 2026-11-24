@@ -1,6 +1,7 @@
 import { digitalClock } from "./DOM/reloj.js";
 import scrollTopButton from "./DOM/boton-scroll.js";
 import actualizarApp from "./DOM/actualizar-app.js";
+import chatFlotante from "./DOM/chat-flotante.js";
 
 const d = document;
 
@@ -8,6 +9,7 @@ const d = document;
 d.addEventListener("DOMContentLoaded", (e)=>{
     digitalClock("#reloj");
     scrollTopButton("#top-btn");
+    chatFlotante("#chat-float");
     
 })
 
