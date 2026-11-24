@@ -1,5 +1,6 @@
 import { digitalClock } from "./DOM/reloj.js";
 import scrollTopButton from "./DOM/boton-scroll.js";
+import actualizarApp from "./DOM/actualizar-app.js";
 
 const d = document;
 
@@ -10,8 +11,4 @@ d.addEventListener("DOMContentLoaded", (e)=>{
     
 })
 
-if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-        navigator.serviceWorker.register("./sw.js").catch(() => {});
-    });
-}
+actualizarApp("#audio");

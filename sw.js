@@ -1,4 +1,4 @@
-const CACHE_VERSION = "v37";
+const CACHE_VERSION = "v42";
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const HTML_CACHE = `html-${CACHE_VERSION}`;
 
@@ -8,6 +8,7 @@ const PRECACHE_ASSETS = [
   "/css/styles.css",
   "/js/app.js",
   "/js/modules.js",
+  "/js/DOM/actualizar-app.js",
   "/js/DOM/boton-scroll.js",
   "/js/DOM/reloj.js",
   "/img/icon-512.png",
@@ -22,7 +23,10 @@ const PRECACHE_ASSETS = [
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(STATIC_CACHE).then((cache) => cache.addAll(PRECACHE_ASSETS))
+    caches.open(STATIC_CACHE).then((cache) =>
+      // "reload" evita guardar copias viejas de la caché HTTP del navegador.
+      cache.addAll(PRECACHE_ASSETS.map((url) => new Request(url, { cache: "reload" })))
+    )
   );
   self.skipWaiting();
 });

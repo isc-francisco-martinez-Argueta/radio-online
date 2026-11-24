@@ -104,6 +104,9 @@ function renderButton() {
     if (controls) {
         controls.classList.toggle("is-playing", active && !state.loading);
     }
+
+    // Intensifica el brillo del logo mientras la radio suena.
+    document.body.classList.toggle("is-live", active && !state.loading);
 }
 
 // Cargar y reproducir una fuente (stream o pista)

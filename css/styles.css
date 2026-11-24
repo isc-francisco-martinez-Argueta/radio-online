@@ -10,7 +10,8 @@
     --red: #ec3838;
     --black: #10151f;           /* base de secciones (usado en el HTML) */
     --blue: #2b6ab5;
-    --blue-2: #3f8fe0;
+    --blue-2: #3f8fe0;          /* texto e iconos sobre fondo oscuro */
+    --blue-strong: #2e72c2;     /* fondo de botones con texto blanco (contraste AA) */
     --white: #e8edf5;
     --text: #e8edf5;
     --muted: #9fb0c3;
@@ -176,7 +177,7 @@ a { text-decoration: none; outline: none; color: inherit; }
     white-space: nowrap;
     border-radius: 999px;
     color: #fff;
-    background: linear-gradient(135deg, #ec3838, #b3242b);
+    background: linear-gradient(135deg, #cf2e2e, #b3242b);
     box-shadow: 0 4px 12px rgba(236, 56, 56, 0.35);
 }
 
@@ -257,7 +258,7 @@ a { text-decoration: none; outline: none; color: inherit; }
     display: flex;
     justify-content: center;
     align-items: center;
-    background: linear-gradient(135deg, var(--blue), var(--blue-2));
+    background: linear-gradient(135deg, var(--blue), var(--blue-strong));
     box-shadow: 0 10px 26px rgba(43, 106, 181, 0.45);
     transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.3s, visibility 0.3s;
 }
@@ -374,11 +375,65 @@ a { text-decoration: none; outline: none; color: inherit; }
 .img-header .welcome a,
 .img-header .welcome button { pointer-events: auto; }
 
-.img-header .welcome .logo {
+/* Logo con efectos: entrada, flotación, brillo y resplandor.
+   Con la radio sonando (body.is-live) el resplandor se intensifica. */
+.img-header .welcome .logo-fx {
+    position: relative;
+    display: inline-block;
     width: 560px;
-    max-width: 86%;
+    max-width: 86vw;
+    animation: logo-in 1s cubic-bezier(.2, .8, .2, 1) both,
+               logo-float 6s ease-in-out 1s infinite;
+}
+
+.img-header .welcome .logo {
+    display: block;
+    width: 100%;
     height: auto;
-    filter: drop-shadow(0 14px 40px rgba(0, 0, 0, 0.55));
+    animation: logo-glow 5s ease-in-out 1s infinite;
+}
+
+/* Reflejo de luz recortado a la forma del logo */
+.img-header .welcome .logo-fx::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.85) 50%, transparent 60%) no-repeat;
+    background-size: 250% 100%;
+    background-position: 150% 0;
+    -webkit-mask: url("../img/logo-vos.png") center / 100% 100% no-repeat;
+    mask: url("../img/logo-vos.png") center / 100% 100% no-repeat;
+    animation: logo-shine 6s ease-in-out 1.4s infinite;
+}
+
+body.is-live .img-header .welcome .logo {
+    animation: logo-glow-live 2.4s ease-in-out infinite;
+}
+
+@keyframes logo-in {
+    from { opacity: 0; transform: scale(0.82); filter: blur(14px); }
+    to   { opacity: 1; transform: scale(1);    filter: blur(0); }
+}
+
+@keyframes logo-float {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-8px); }
+}
+
+@keyframes logo-shine {
+    0%, 55% { background-position: 150% 0; }
+    85%, 100% { background-position: -50% 0; }
+}
+
+@keyframes logo-glow {
+    0%, 100% { filter: drop-shadow(0 14px 40px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 18px rgba(236, 56, 56, 0.35)); }
+    50%      { filter: drop-shadow(0 14px 40px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 26px rgba(43, 106, 181, 0.55)); }
+}
+
+@keyframes logo-glow-live {
+    0%, 100% { filter: drop-shadow(0 14px 40px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 28px rgba(236, 56, 56, 0.75)) brightness(1.08); }
+    50%      { filter: drop-shadow(0 14px 40px rgba(0, 0, 0, 0.55)) drop-shadow(0 0 48px rgba(63, 143, 224, 0.9)) brightness(1.15); }
 }
 
 .img-header .welcome hr {
@@ -406,14 +461,19 @@ a { text-decoration: none; outline: none; color: inherit; }
     color: #fff;
     margin-top: 26px;
     cursor: pointer;
-    background: linear-gradient(135deg, var(--blue), var(--blue-2));
+    background: linear-gradient(135deg, var(--blue), var(--blue-strong));
     box-shadow: 0 10px 28px rgba(43, 106, 181, 0.45);
     transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
 }
 
+/* Bootstrap pinta a:hover de azul; el texto del botón se mantiene blanco en todos los estados. */
+.button-danger:hover,
+.button-danger:focus,
+.button-danger:active,
+.button-danger:visited { color: #fff; }
+
 .button-danger:hover {
     transform: translateY(-2px);
-    filter: brightness(1.08);
     box-shadow: 0 14px 34px rgba(43, 106, 181, 0.6);
 }
 
@@ -445,7 +505,7 @@ a { text-decoration: none; outline: none; color: inherit; }
 }
 
 .circle-social:hover {
-    background: linear-gradient(135deg, var(--blue), var(--blue-2));
+    background: linear-gradient(135deg, var(--blue), var(--blue-strong));
     border-color: transparent;
     transform: scale(1.12);
     box-shadow: 0 0 22px rgba(43, 106, 181, 0.65);
@@ -589,7 +649,7 @@ footer {
 }
 
 .footer-social-icons ul li:hover {
-    background: linear-gradient(135deg, var(--blue), var(--blue-2));
+    background: linear-gradient(135deg, var(--blue), var(--blue-strong));
     border-color: transparent;
     transform: translateY(-3px);
     box-shadow: 0 0 22px rgba(43, 106, 181, 0.55);
@@ -612,7 +672,7 @@ footer {
 }
 
 .footer-bottom p a { color: #fff; text-decoration: underline; transition: color 0.3s ease; }
-.footer-bottom p a:hover { color: #0a0d13; }
+.footer-bottom p a:hover { text-decoration: none; }
 
 /** Responsive **/
 @media only screen and (max-width: 900px) {
@@ -621,7 +681,7 @@ footer {
 }
 
 @media only screen and (max-width: 773px) {
-    .img-header .welcome .logo { width: 290px; }
+    .img-header .welcome .logo-fx { width: 290px; }
     .button-danger { min-width: 140px; font-size: 18px; }
     .social-float { display: none; }
     .clientes .info-container { flex-direction: column; }
@@ -771,7 +831,7 @@ footer {
 .pwa-install-btn {
     width: 100%;
     padding: 14px 24px;
-    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-2) 100%);
+    background: linear-gradient(135deg, var(--blue) 0%, var(--blue-strong) 100%);
     color: #fff;
     border: none;
     border-radius: 12px;
