@@ -401,8 +401,8 @@ button:focus-visible {
     display: inline-block;
     width: 560px;
     max-width: 86vw;
-    animation: logo-in 1s cubic-bezier(.2, .8, .2, 1) both,
-               logo-float 6s ease-in-out 1s infinite;
+    animation: logo-in 0.6s cubic-bezier(.2, .8, .2, 1) both,
+               logo-float 6s ease-in-out 2.4s infinite;
 }
 
 .img-header .welcome .logo {
@@ -412,27 +412,13 @@ button:focus-visible {
     animation: logo-glow 5s ease-in-out 1s infinite;
 }
 
-/* Reflejo de luz recortado a la forma del logo */
-.img-header .welcome .logo-fx::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.85) 50%, transparent 60%) no-repeat;
-    background-size: 250% 100%;
-    background-position: 150% 0;
-    -webkit-mask: url("../img/logo-vos.png") center / 100% 100% no-repeat;
-    mask: url("../img/logo-vos.png") center / 100% 100% no-repeat;
-    animation: logo-shine 6s ease-in-out 1.4s infinite;
-}
-
 body.is-live .img-header .welcome .logo {
     animation: logo-glow-live 2.4s ease-in-out infinite;
 }
 
 @keyframes logo-in {
-    from { opacity: 0; transform: scale(0.82); filter: blur(14px); }
-    to   { opacity: 1; transform: scale(1);    filter: blur(0); }
+    from { opacity: 0; transform: scale(0.9); }
+    to   { opacity: 1; transform: scale(1); }
 }
 
 @keyframes logo-float {
@@ -440,9 +426,82 @@ body.is-live .img-header .welcome .logo {
     50%      { transform: translateY(-8px); }
 }
 
-@keyframes logo-shine {
-    0%, 55% { background-position: 150% 0; }
-    85%, 100% { background-position: -50% 0; }
+/* ---------- Logo SVG animado (cada parte por separado) ----------
+   1) V y S se "dibujan" con su contorno y luego se rellenan.
+   2) La "O" aparece con rebote; su degradado gira (SMIL en el SVG).
+   3) "91.3" sube cifra por cifra.
+   4) Un brillo cruza el logo cada 7 s.
+   5) Con la radio sonando (body.is-live): la "O" late y salen ondas. */
+.logo-svg { overflow: visible; }
+.logo-svg .lg-o,
+.logo-svg .lg-wave,
+.logo-svg .lg-digit { transform-box: fill-box; transform-origin: center; }
+
+.logo-svg .lg-draw {
+    fill: #fff;
+    fill-opacity: 0;
+    stroke: #fff;
+    stroke-width: 4;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    animation: lg-draw 1.3s cubic-bezier(.6, 0, .3, 1) forwards,
+               lg-fill 0.5s ease-out forwards;
+}
+.logo-svg .lg-v { animation-delay: 0.15s, 1.05s; }
+.logo-svg .lg-s { animation-delay: 0.4s, 1.3s; }
+
+@keyframes lg-draw { to { stroke-dashoffset: 0; } }
+@keyframes lg-fill { to { fill-opacity: 1; stroke-opacity: 0; } }
+
+.logo-svg .lg-o { animation: lg-pop 0.9s cubic-bezier(.3, 1.6, .5, 1) 0.55s both; }
+@keyframes lg-pop {
+    0%   { transform: scale(0) rotate(-12deg); opacity: 0; }
+    100% { transform: scale(1) rotate(0);      opacity: 1; }
+}
+
+.logo-svg .lg-digit { fill: #fff; animation: lg-rise 0.55s cubic-bezier(.2, .9, .3, 1.3) both; }
+.logo-svg .lg-digit:nth-child(1) { animation-delay: 1.25s; }
+.logo-svg .lg-digit:nth-child(2) { animation-delay: 1.35s; }
+.logo-svg .lg-digit:nth-child(3) { animation-delay: 1.45s; }
+.logo-svg .lg-digit:nth-child(4) { animation-delay: 1.55s; }
+@keyframes lg-rise {
+    from { transform: translateY(60px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+
+.logo-svg .lg-shine {
+    transform: translateX(0) skewX(-18deg);
+    animation: lg-shine 7s ease-in-out 2.2s infinite;
+}
+@keyframes lg-shine {
+    0%        { transform: translateX(0) skewX(-18deg); }
+    30%, 100% { transform: translateX(1560px) skewX(-18deg); }
+}
+
+/* Radio sonando */
+.logo-svg .lg-waves { display: none; }
+body.is-live .logo-svg .lg-waves { display: inline; }
+.logo-svg .lg-wave {
+    fill: none;
+    stroke: url(#vosGrad);
+    stroke-width: 7;
+    opacity: 0;
+    animation: lg-wave 2.4s ease-out infinite;
+}
+.logo-svg .lg-wave:nth-child(2) { animation-delay: 0.8s; }
+.logo-svg .lg-wave:nth-child(3) { animation-delay: 1.6s; }
+@keyframes lg-wave {
+    0%   { transform: scale(1);    opacity: 0.75; }
+    100% { transform: scale(1.55); opacity: 0; }
+}
+
+body.is-live .logo-svg .lg-o { animation: lg-beat 0.9s ease-in-out infinite; opacity: 1; }
+@keyframes lg-beat {
+    0%, 100% { transform: scale(1); }
+    15%      { transform: scale(1.07); }
+    30%      { transform: scale(0.99); }
+    45%      { transform: scale(1.04); }
 }
 
 @keyframes logo-glow {
@@ -1013,7 +1072,19 @@ footer {
 
 .pwa-later-btn:hover { background: rgba(255, 255, 255, 0.06); color: #fff; }
 
-/* Pasos de instalación (según sistema y navegador) */
+/* Pasos de instalación (según sistema y navegador) — van ANTES de los botones */
+.pwa-card-content .pwa-guide { order: 2; }
+.pwa-card-content .pwa-actions { order: 3; }
+/* En modo "pasos" la tarjeta se compacta: sin descripción ni ventajas */
+.pwa-install-card.guide-mode .pwa-description,
+.pwa-install-card.guide-mode .pwa-features { display: none; }
+.pwa-install-card.guide-mode .pwa-card-content { gap: 14px; }
+.pwa-install-card.guide-mode .pwa-title { margin-bottom: 0; }
+.pwa-install-card {
+    max-height: calc(100dvh - 40px - env(safe-area-inset-bottom, 0px));
+    overflow-y: auto;
+}
+
 .pwa-guide {
     padding: 14px 16px;
     background: rgba(43, 106, 181, 0.14);

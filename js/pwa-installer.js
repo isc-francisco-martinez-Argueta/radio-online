@@ -1,5 +1,6 @@
 /**
- * PWA Installation Manager v4.0
+ * PWA Installation Manager v4.1
+ * v4.1: instalada = no se muestra nada; "Más tarde" = tarjeta en 7 días + botón en el pie.
  * v4.0: instrucciones de instalación según sistema y navegador
  *       (iPhone/iPad, Android, computadora; Safari, Chrome, Edge, Samsung, Firefox, Opera
  *       y navegadores internos de Facebook/Instagram/TikTok) + botón "Instalar la app" en el pie.
@@ -156,12 +157,17 @@ function installGuide({ os, browser, inApp }) {
     };
 }
 
+/**
+ * Reglas:
+ *  - Instalada                → no se muestra ni la tarjeta ni el botón del pie.
+ *  - "Más tarde" / "Entendido" / ✕ → la tarjeta vuelve a salir en 7 días;
+ *                                    mientras tanto aparece el botón "Instalar la app" en el pie.
+ *  - Primera visita           → sale la tarjeta (el botón del pie todavía no).
+ */
 class PWAInstaller {
     constructor() {
         this.deferredPrompt = null;
         this.platform = detectPlatform();
-        this.isIOS = this.platform.os === 'ios';
-        this.uninstallCheckInterval = null;
 
         this.card = document.getElementById('pwa-install-card');
         this.installBtn = document.getElementById('pwa-install-btn');
@@ -175,44 +181,132 @@ class PWAInstaller {
             showDelay: 3000,
             dismissedKey: 'pwa-dismissed',
             installedKey: 'pwa-installed',
-            dismissedDuration: 7 * 24 * 60 * 60 * 1000,
+            dismissedDuration: 7 * 24 * 60 * 60 * 1000, // 1 semana
         };
 
         this.init();
     }
 
-    checkIfInstalled() {
-        const isDisplayStandalone = window.matchMedia('(display-mode: standalone)').matches;
-        const isIOSStandalone = window.navigator.standalone === true;
-        const isAndroidInstalled = document.referrer.includes('android-app://');
-        return isDisplayStandalone || isIOSStandalone || isAndroidInstalled;
+    /* ---------- almacenamiento (protegido: puede fallar en modo privado) ---------- */
+    store(key, value) {
+        try {
+            if (value === null) localStorage.removeItem(key);
+            else localStorage.setItem(key, value);
+        } catch { /* sin almacenamiento: se comporta como primera visita */ }
+    }
+
+    read(key) {
+        try { return localStorage.getItem(key); } catch { return null; }
+    }
+
+    /* ---------- estado ---------- */
+    isStandalone() {
+        return window.matchMedia('(display-mode: standalone)').matches ||
+            window.navigator.standalone === true ||
+            document.referrer.includes('android-app://');
+    }
+
+    isInstalled() {
+        return this.isStandalone() || this.read(this.config.installedKey) === 'true';
+    }
+
+    wasDismissedRecently() {
+        const dismissed = parseInt(this.read(this.config.dismissedKey) || '', 10);
+        if (!dismissed) return false;
+        return (Date.now() - dismissed) < this.config.dismissedDuration;
     }
 
     shouldShowCard() {
-        if (this.checkIfInstalled()) return false;
-        if (localStorage.getItem(this.config.installedKey) === 'true') return false;
-        if (this.wasDismissedRecently()) return false;
-        return true;
+        return !this.isInstalled() && !this.wasDismissedRecently();
     }
 
+    markAsInstalled() {
+        this.store(this.config.installedKey, 'true');
+        this.store(this.config.dismissedKey, null);
+        this.refreshUI();
+    }
+
+    markAsUninstalled() {
+        this.store(this.config.installedKey, null);
+        this.refreshUI();
+    }
+
+    markAsDismissed() {
+        this.store(this.config.dismissedKey, Date.now().toString());
+        this.refreshUI();
+    }
+
+    resetInstallState() {
+        this.store(this.config.installedKey, null);
+        this.store(this.config.dismissedKey, null);
+        this.refreshUI();
+    }
+
+    /** Botón del pie: solo si NO está instalada y eligieron "Más tarde" esta semana. */
+    refreshUI() {
+        if (this.ctaWrap) {
+            this.ctaWrap.hidden = this.isInstalled() || !this.wasDismissedRecently();
+        }
+        if (this.isInstalled() && this.card?.classList.contains('show')) this.hideCard();
+    }
+
+    /* ---------- arranque ---------- */
     init() {
-        // Dentro de la app instalada no se ofrece instalar nada.
-        if (this.checkIfInstalled()) return;
-
-        this.renderGuide();
-        this.wireInstallControls();
-
-        if (!this.shouldShowCard()) {
-            if (localStorage.getItem(this.config.installedKey) === 'true') {
-                this.startUninstallCheck();
-            }
+        // Abierta como app: queda marcada como instalada y no se ofrece nada.
+        if (this.isStandalone()) {
+            this.store(this.config.installedKey, 'true');
             return;
         }
 
-        this.setupEventListeners();
-        setTimeout(() => this.showCard(), this.config.showDelay);
+        this.renderGuide();
+        this.wireControls();
+        this.refreshUI();
+        this.detectInstalledApp();
+
+        if (this.shouldShowCard()) {
+            setTimeout(() => this.showCard(), this.config.showDelay);
+        }
     }
 
+    /**
+     * Android/Chrome: pregunta al navegador si la PWA ya está instalada
+     * (requiere "related_applications" en el manifest).
+     */
+    async detectInstalledApp() {
+        if (!('getInstalledRelatedApps' in navigator)) return;
+        try {
+            const apps = await navigator.getInstalledRelatedApps();
+            if (apps.some((a) => a.platform === 'webapp')) this.markAsInstalled();
+        } catch { /* no soportado */ }
+    }
+
+    wireControls() {
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            this.deferredPrompt = e;
+            // Chrome/Edge solo lanzan este evento si la app NO está instalada:
+            // si estaba marcada como instalada, la desinstalaron.
+            if (this.read(this.config.installedKey) === 'true') {
+                this.markAsUninstalled();
+                if (this.shouldShowCard()) this.showCard();
+            }
+            this.updateMode();
+        });
+
+        window.addEventListener('appinstalled', () => {
+            this.deferredPrompt = null;
+            this.markAsInstalled();
+            this.hideCard();
+            this.showSuccessMessage();
+        });
+
+        this.installBtn?.addEventListener('click', () => this.handleInstall());
+        this.laterBtn?.addEventListener('click', () => this.dismissCard());
+        this.closeBtn?.addEventListener('click', () => this.dismissCard());
+        this.ctaBtn?.addEventListener('click', () => this.showCard({ force: true }));
+    }
+
+    /* ---------- tarjeta ---------- */
     /** Llena la tarjeta con los pasos del navegador actual. */
     renderGuide() {
         if (!this.guide) return;
@@ -232,113 +326,21 @@ class PWAInstaller {
     }
 
     /**
-     * Con instalación nativa (Chrome/Edge/Samsung en Android y computadora) se muestra el botón
-     * "Instalar App". Sin ella (iPhone, Safari, Firefox...) se muestran los pasos y "Entendido".
+     * Con instalación nativa (Chrome/Edge/Samsung) se muestra el botón "Instalar App".
+     * Sin ella (iPhone, Safari, Firefox...) se muestran los pasos y "Entendido".
      */
     updateMode() {
         const native = !!this.deferredPrompt;
         if (this.guide) this.guide.hidden = native;
         if (this.installBtn) this.installBtn.hidden = !native;
         if (this.laterBtn) this.laterBtn.textContent = native ? 'Más tarde' : 'Entendido';
+        this.card?.classList.toggle('guide-mode', !native);
     }
 
-    /** Controles que funcionan siempre (aunque la tarjeta se haya cerrado antes). */
-    wireInstallControls() {
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            this.deferredPrompt = e;
-            this.updateMode();
-        });
-
-        this.installBtn?.addEventListener('click', () => this.handleInstall());
-        this.laterBtn?.addEventListener('click', () => this.dismissCard());
-        this.closeBtn?.addEventListener('click', () => this.hideCard());
-
-        window.addEventListener('appinstalled', () => {
-            this.markAsInstalled();
-            this.hideCard();
-            if (this.ctaWrap) this.ctaWrap.hidden = true;
-            this.showSuccessMessage();
-        });
-
-        if (this.ctaWrap && this.ctaBtn) {
-            this.ctaWrap.hidden = false;
-            this.ctaBtn.addEventListener('click', () => this.showCard({ force: true }));
-        }
-    }
-
-    setupEventListeners() {
-        window.matchMedia('(display-mode: standalone)').addEventListener('change', (e) => {
-            if (e.matches) {
-                this.markAsInstalled();
-            } else {
-                this.checkIfUninstalled();
-            }
-        });
-
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'visible') {
-                this.checkIfUninstalled();
-            }
-        });
-
-        this.startUninstallCheck();
-    }
-
-    startUninstallCheck() {
-        if (localStorage.getItem(this.config.installedKey) === 'true') {
-            this.uninstallCheckInterval = setInterval(() => {
-                this.checkIfUninstalled();
-            }, 30000);
-        }
-    }
-
-    checkIfUninstalled() {
-        const wasMarkedAsInstalled = localStorage.getItem(this.config.installedKey) === 'true';
-        if (!wasMarkedAsInstalled) return;
-
-        const isStillInstalled = this.checkIfInstalled();
-        if (!isStillInstalled) {
-            this.handleUninstall();
-        }
-    }
-
-    handleUninstall() {
-        localStorage.removeItem(this.config.installedKey);
-        localStorage.removeItem(this.config.dismissedKey);
-
-        if (this.uninstallCheckInterval) {
-            clearInterval(this.uninstallCheckInterval);
-            this.uninstallCheckInterval = null;
-        }
-
-        setTimeout(() => {
-            if (!this.checkIfInstalled()) {
-                this.showCard();
-            }
-        }, 2000);
-    }
-
-    markAsInstalled() {
-        localStorage.setItem(this.config.installedKey, 'true');
-        localStorage.removeItem(this.config.dismissedKey);
-        this.startUninstallCheck();
-    }
-
-    resetInstallState() {
-        localStorage.removeItem(this.config.installedKey);
-        localStorage.removeItem(this.config.dismissedKey);
-
-        if (this.uninstallCheckInterval) {
-            clearInterval(this.uninstallCheckInterval);
-            this.uninstallCheckInterval = null;
-        }
-    }
-
-    /** @param {{force?: boolean}} opts  force = abierto a mano desde el botón del pie */
+    /** @param {{force?: boolean}} opts  force = abierta a mano desde el botón del pie */
     showCard({ force = false } = {}) {
         if (!this.card) return;
-        if (force ? this.checkIfInstalled() : !this.shouldShowCard()) return;
+        if (force ? this.isInstalled() : !this.shouldShowCard()) return;
 
         this.updateMode();
 
@@ -357,7 +359,6 @@ class PWAInstaller {
         if (!this.card) return;
 
         // ACCESIBILIDAD CRÍTICA: Remover foco ANTES de aria-hidden
-        // Esto previene el error: "Blocked aria-hidden on focused element"
         if (document.activeElement && this.card.contains(document.activeElement)) {
             document.activeElement.blur();
         }
@@ -365,13 +366,12 @@ class PWAInstaller {
         this.card.classList.remove('show', 'animate-in');
         this.card.classList.add('hide');
 
-        // Aplicar aria-hidden con un pequeño delay
-        // para asegurar que el foco ya se removió
         setTimeout(() => {
             this.card.setAttribute('aria-hidden', 'true');
         }, 50);
     }
 
+    /** "Más tarde", "Entendido" o ✕: no volver a mostrarla en una semana. */
     dismissCard() {
         this.hideCard();
         this.markAsDismissed();
@@ -392,12 +392,15 @@ class PWAInstaller {
         try {
             this.deferredPrompt.prompt();
             const { outcome } = await this.deferredPrompt.userChoice;
+            this.deferredPrompt = null;
 
             if (outcome === 'accepted') {
                 this.markAsInstalled();
+                this.hideCard();
+            } else {
+                // Cerró el diálogo del navegador: cuenta como "Más tarde".
+                this.dismissCard();
             }
-            this.hideCard();
-            this.deferredPrompt = null;
             this.updateMode();
         } catch (error) {
             this.showErrorMessage();
@@ -406,19 +409,7 @@ class PWAInstaller {
         }
     }
 
-    wasDismissedRecently() {
-        const dismissed = localStorage.getItem(this.config.dismissedKey);
-        if (!dismissed) return false;
-
-        const dismissedTime = parseInt(dismissed, 10);
-        const now = Date.now();
-        return (now - dismissedTime) < this.config.dismissedDuration;
-    }
-
-    markAsDismissed() {
-        localStorage.setItem(this.config.dismissedKey, Date.now().toString());
-    }
-
+    /* ---------- avisos ---------- */
     showSuccessMessage() {
         this.showToast('¡App instalada correctamente! 🎉', 'success');
     }

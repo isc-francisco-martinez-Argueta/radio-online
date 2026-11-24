@@ -1,4 +1,4 @@
-const CACHE_VERSION = "v46";
+const CACHE_VERSION = "v47";
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const HTML_CACHE = `html-${CACHE_VERSION}`;
 
@@ -12,10 +12,10 @@ const PRECACHE_ASSETS = [
   "/js/DOM/boton-scroll.js",
   "/js/DOM/reloj.js",
   "/js/DOM/chat-flotante.js",
-  "/img/icon-512.png?v=2",
-  "/img/icon-192.png?v=2",
-  "/img/favicon-32.png?v=2",
-  "/img/logo-vos.png",
+  "/img/icon-512.png?v=3",
+  "/img/icon-192.png?v=3",
+  "/img/favicon-32.png?v=3",
+  "/img/icon-maskable-512.png?v=3",
   "/img/mytuner_logo.png",
   "/img/logo-listener.png",
   "/img/headervideo1.jpg",
