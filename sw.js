@@ -1,4 +1,4 @@
-const CACHE_VERSION = "v44";
+const CACHE_VERSION = "v45";
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const HTML_CACHE = `html-${CACHE_VERSION}`;
 
@@ -12,9 +12,9 @@ const PRECACHE_ASSETS = [
   "/js/DOM/boton-scroll.js",
   "/js/DOM/reloj.js",
   "/js/DOM/chat-flotante.js",
-  "/img/icon-512.png",
-  "/img/icon-192.png",
-  "/img/favicon-32.png",
+  "/img/icon-512.png?v=2",
+  "/img/icon-192.png?v=2",
+  "/img/favicon-32.png?v=2",
   "/img/logo-vos.png",
   "/img/mytuner_logo.png",
   "/img/logo-listener.png",
@@ -58,6 +58,14 @@ function isRadioStream(url) {
   return /shoutcast-stream/.test(url);
 }
 
+// Manifest e iconos de la app: SIEMPRE red primero. Si se sirven desde la caché,
+// el navegador nunca ve el ícono nuevo y la PWA instalada no se actualiza.
+function isAppIdentity(url) {
+  const { pathname } = new URL(url, self.location.origin);
+  return pathname === "/manifest.webmanifest" ||
+    /^\/img\/(icon-|apple-touch-icon|favicon)/.test(pathname);
+}
+
 function isMusic(url) {
   // Audio de respaldo y su lista: siempre desde la red, sin cachear.
   return /\/musica\//.test(url);
@@ -70,6 +78,21 @@ self.addEventListener("fetch", (event) => {
   // No interceptar el stream de radio ni el audio de respaldo: dejar que
   // el navegador los maneje evita errores "Failed to fetch" y datos obsoletos.
   if (isRadioStream(url) || isMusic(url)) {
+    return;
+  }
+
+  if (isSameOrigin(url) && isAppIdentity(url)) {
+    event.respondWith(
+      fetch(request, { cache: "no-cache" })
+        .then((response) => {
+          if (response && response.status === 200) {
+            const copy = response.clone();
+            caches.open(STATIC_CACHE).then((cache) => cache.put(request, copy));
+          }
+          return response;
+        })
+        .catch(() => caches.match(request))
+    );
     return;
   }
 
