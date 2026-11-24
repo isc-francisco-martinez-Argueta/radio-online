@@ -1,4 +1,4 @@
-const CACHE_VERSION = "v33";
+const CACHE_VERSION = "v37";
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const HTML_CACHE = `html-${CACHE_VERSION}`;
 
@@ -10,8 +10,10 @@ const PRECACHE_ASSETS = [
   "/js/modules.js",
   "/js/DOM/boton-scroll.js",
   "/js/DOM/reloj.js",
-  "/img/icon-vos.png",
-  "/img/logo.gif",
+  "/img/icon-512.png",
+  "/img/icon-192.png",
+  "/img/favicon-32.png",
+  "/img/logo-vos.png",
   "/img/mytuner_logo.png",
   "/img/logo-listener.png",
   "/img/headervideo1.jpg",

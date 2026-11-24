@@ -9,13 +9,13 @@
   "description": "Escucha VOS FM en línea. Información, música y entretenimiento desde Bochil, Chiapas, México.",
   "icons": [
     {
-      "src": "img/icon-vos.png",
+      "src": "img/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "img/icon-vos.png",
+      "src": "img/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
