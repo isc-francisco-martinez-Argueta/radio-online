@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
     <!-- Primary Meta Tags -->
@@ -19,7 +19,7 @@
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-    <meta name="theme-color" content="#2b6ab5" />
+    <meta name="theme-color" content="#090d14" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -151,17 +151,11 @@
             </button>
         </div>
 
-        <!-- iOS Instructions (hidden by default) -->
-        <div class="pwa-ios-instructions" id="pwa-ios-instructions" style="display: none;">
-            <p class="ios-title">
-                <i class="fab fa-apple" aria-hidden="true"></i>
-                Para instalar en iOS:
-            </p>
-            <ol class="ios-steps">
-                <li>Toca el botón <i class="fas fa-share" aria-hidden="true"></i> en Safari</li>
-                <li>Selecciona "Añadir a pantalla de inicio"</li>
-                <li>Confirma tocando "Añadir"</li>
-            </ol>
+        <!-- Pasos de instalación según sistema y navegador (los llena pwa-installer.js) -->
+        <div class="pwa-guide" id="pwa-guide" hidden>
+            <p class="pwa-guide__title" id="pwa-guide-title"></p>
+            <ol class="pwa-guide__steps" id="pwa-guide-steps"></ol>
+            <p class="pwa-guide__note" id="pwa-guide-note" hidden></p>
         </div>
     </div>
 </div>
@@ -394,6 +388,14 @@
         </ul>
     </div>
 </footer>
+
+<!-- Instalar la app (se oculta si ya está instalada) -->
+<div class="install-cta" id="install-cta" hidden>
+    <button type="button" class="install-cta__btn" id="install-cta-btn">
+        <i class="fas fa-mobile-alt" aria-hidden="true"></i>
+        Instalar la app de VOS FM
+    </button>
+</div>
 
 <!-- Footer Bottom -->
 <div class="footer-bottom">

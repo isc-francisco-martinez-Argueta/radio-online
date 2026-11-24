@@ -32,7 +32,8 @@
     box-sizing: border-box;
 }
 
-html { scroll-behavior: smooth; }
+/* Fondo oscuro también detrás de la barra de estado del iPhone (hora, wifi, batería) */
+html { scroll-behavior: smooth; background-color: #090d14; }
 
 body {
     min-height: 100vh;
@@ -86,8 +87,12 @@ button:focus-visible {
 
 .menu {
     width: 100%;
-    height: 78px;
-    padding: 0.5rem 1.1rem;
+    /* env(safe-area-inset-*) = espacio de la barra de estado / notch en la app instalada */
+    height: calc(78px + env(safe-area-inset-top, 0px));
+    padding: calc(0.5rem + env(safe-area-inset-top, 0px))
+             calc(1.1rem + env(safe-area-inset-right, 0px))
+             0.5rem
+             calc(1.1rem + env(safe-area-inset-left, 0px));
     background: rgba(9, 13, 20, 0.55);
     -webkit-backdrop-filter: blur(16px);
     backdrop-filter: blur(16px);
@@ -672,7 +677,7 @@ footer {
 .footer-bottom {
     width: 100%;
     margin: auto;
-    padding: 12px;
+    padding: 12px 12px calc(12px + env(safe-area-inset-bottom, 0px));
     text-align: center;
     background: linear-gradient(135deg, #1e5a9e, var(--blue));
 }
@@ -743,8 +748,8 @@ footer {
    ===================================================================== */
 .chat-float {
     position: fixed;
-    right: 14px;
-    bottom: 20px;
+    right: calc(14px + env(safe-area-inset-right, 0px));
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
     z-index: 1001;
     display: flex;
     flex-direction: column;
@@ -840,11 +845,11 @@ footer {
 .chat-option small { font-size: 12.5px; color: var(--muted); }
 
 /* El botón "volver arriba" se apila encima del chat */
-.scroll-top-btn { bottom: 92px; }
+.scroll-top-btn { bottom: calc(92px + env(safe-area-inset-bottom, 0px)); right: calc(14px + env(safe-area-inset-right, 0px)); }
 
 @media only screen and (max-width: 590px) {
     .chat-toggle { width: 2.9rem; height: 2.9rem; font-size: 1.3rem; }
-    .scroll-top-btn { bottom: 80px; }
+    .scroll-top-btn { bottom: calc(80px + env(safe-area-inset-bottom, 0px)); }
     .chat-menu { width: min(270px, calc(100vw - 28px)); }
 }
 
@@ -1008,19 +1013,69 @@ footer {
 
 .pwa-later-btn:hover { background: rgba(255, 255, 255, 0.06); color: #fff; }
 
-.pwa-ios-instructions {
-    margin-top: 20px;
-    padding: 16px;
-    background: rgba(43, 106, 181, 0.12);
+/* Pasos de instalación (según sistema y navegador) */
+.pwa-guide {
+    padding: 14px 16px;
+    background: rgba(43, 106, 181, 0.14);
     border-radius: 12px;
     border-left: 4px solid var(--blue-2);
+    text-align: left;
+}
+.pwa-guide[hidden] { display: none; }
+.pwa-guide.highlight { animation: guide-pulse 1s ease; }
+@keyframes guide-pulse {
+    0%, 100% { background: rgba(43, 106, 181, 0.14); }
+    50%      { background: rgba(43, 106, 181, 0.32); }
 }
 
-.ios-title { font-size: 15px; font-weight: 700; color: #fff; margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px; }
-.ios-title i { font-size: 18px; }
-.ios-steps { margin: 0; padding-left: 24px; color: var(--muted); font-size: 14px; line-height: 1.8; }
-.ios-steps li { margin-bottom: 8px; }
-.ios-steps i { color: var(--blue-2); font-weight: bold; }
+.pwa-guide__title { font-size: 15px; font-weight: 700; color: #fff; margin: 0 0 10px; display: flex; align-items: center; gap: 8px; }
+.pwa-guide__title i { font-size: 18px; color: var(--blue-2); }
+.pwa-guide__steps { margin: 0; padding-left: 22px; color: var(--text); font-size: 14px; line-height: 1.55; }
+.pwa-guide__steps li { margin-bottom: 8px; }
+.pwa-guide__steps li::marker { color: var(--blue-2); font-weight: 700; }
+.pwa-guide__steps strong { color: #fff; }
+.pwa-guide__note { margin: 6px 0 0; font-size: 12.5px; color: var(--muted); }
+.pwa-guide__note[hidden] { display: none; }
+
+/* Ícono "Compartir" de iOS dibujado en SVG + "teclas" de menú (⋮, •••, ≡) */
+.kbd-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 24px;
+    height: 22px;
+    padding: 0 5px;
+    margin: 0 2px;
+    vertical-align: -5px;
+    border-radius: 6px;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    line-height: 1;
+}
+.kbd-icon svg { width: 14px; height: 14px; }
+
+/* Botón "Instalar la app" del pie */
+.install-cta { display: flex; justify-content: center; padding: 0 16px 26px; }
+.install-cta[hidden] { display: none; }
+.install-cta__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 22px;
+    border-radius: 999px;
+    border: 1px solid var(--glass-border);
+    background: var(--glass-strong);
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.install-cta__btn i { color: var(--blue-2); font-size: 18px; }
+.install-cta__btn:hover { background: rgba(43, 106, 181, 0.25); border-color: var(--blue-2); transform: translateY(-2px); }
 
 @media only screen and (max-width: 480px) {
     .pwa-install-card { bottom: 10px; width: calc(100% - 20px); padding: 20px; border-radius: 16px; }

@@ -1,4 +1,4 @@
-const CACHE_VERSION = "v45";
+const CACHE_VERSION = "v46";
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const HTML_CACHE = `html-${CACHE_VERSION}`;
 

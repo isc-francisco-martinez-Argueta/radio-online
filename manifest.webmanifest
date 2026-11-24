@@ -5,8 +5,8 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#2b6ab5",
+  "background_color": "#090d14",
+  "theme_color": "#090d14",
   "description": "Escucha VOS FM en línea. Información, música y entretenimiento desde Bochil, Chiapas, México.",
   "icons": [
     {
