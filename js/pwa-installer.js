@@ -418,54 +418,11 @@ class PWAInstaller {
         this.showToast('No se pudo instalar. Intenta de nuevo.', 'error');
     }
 
-    showToast(message, type = 'info', duration = 3000) {
-        const toast = document.createElement('div');
-        toast.className = `pwa-toast pwa-toast-${type}`;
-        toast.textContent = message;
-        toast.setAttribute('role', 'alert');
-        toast.setAttribute('aria-live', 'polite');
-
-        document.body.appendChild(toast);
-        setTimeout(() => toast.classList.add('show'), 100);
-        setTimeout(() => {
-            toast.classList.remove('show');
-            setTimeout(() => toast.remove(), 300);
-        }, duration);
+    showToast(message, type = 'info', duration) {
+        // Usa el sistema de avisos de la página (js/DOM/avisos.js)
+        document.dispatchEvent(new CustomEvent('vos:aviso', { detail: { message, type, duration } }));
     }
 }
-
-// Estilos del aviso (toast). Colores oscuros: texto blanco con contraste ≥ 4.5:1.
-const toastStyles = `
-.pwa-toast {
-    position: fixed;
-    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
-    left: 50%;
-    transform: translateX(-50%) translateY(100px);
-    background: #1d2633;
-    color: #fff;
-    padding: 12px 24px;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 600;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    z-index: 10000;
-    opacity: 0;
-    transition: all 0.3s ease;
-    max-width: 90%;
-    text-align: center;
-}
-.pwa-toast.show {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
-}
-.pwa-toast-success { background: #1b7a3e; }
-.pwa-toast-error   { background: #b3242b; }
-.pwa-toast-info    { background: #1e5a9e; }
-`;
-
-const styleSheet = document.createElement('style');
-styleSheet.textContent = toastStyles;
-document.head.appendChild(styleSheet);
 
 // Inicializar
 if (document.readyState === 'loading') {

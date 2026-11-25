@@ -32,6 +32,11 @@ function showError(message) {
     console.warn(message);
 }
 
+// Mensaje visible para el usuario (toast). Lo dibuja js/DOM/avisos.js.
+function aviso(message, type = "info") {
+    document.dispatchEvent(new CustomEvent("vos:aviso", { detail: { message, type } }));
+}
+
 // Cargar la lista de respaldo generada por el panel de administración
 async function loadPlaylist() {
     try {
@@ -107,6 +112,10 @@ function renderButton() {
 
     // Intensifica el brillo del logo mientras la radio suena.
     document.body.classList.toggle("is-live", active && !state.loading);
+
+    // Avisa al resto de la interfaz (botones "Escuchar en vivo", portada…)
+    window.vosPlayerState = { active, loading: active && state.loading, mode: state.mode, disabled: !hasContent };
+    document.dispatchEvent(new CustomEvent("vos:player", { detail: window.vosPlayerState }));
 }
 
 // Cargar y reproducir una fuente (stream o pista)
@@ -180,6 +189,9 @@ function stopPlayback() {
 
 // Manejo de errores de reproducción con fallback automático a la lista local
 function handlePlaybackError() {
+    // El usuario ya la apagó (p. ej. detuvo mientras conectaba): no es un error real.
+    if (state.mode === "idle") return;
+
     if (state.reconnectTimer) {
         return; // ya hay un reintento en curso (evita duplicados)
     }
@@ -198,6 +210,7 @@ function handlePlaybackError() {
     // 2) Stream agotado: pasar a la lista, retomando donde se quedó el usuario
     if (state.mode === "radio" && CONFIG.playlist.length > 0) {
         console.log("Stream no disponible: reproduciendo lista local de respaldo.");
+        aviso("La señal en vivo no responde. Mientras regresa, te ponemos música de VOS FM.", "info");
         state.mode = "playlist";
         state.currentTrackIndex = loadSavedIndex();
         state.playlistFailures = 0;
@@ -214,6 +227,7 @@ function handlePlaybackError() {
             console.warn("Ninguna canción de la lista se pudo reproducir. Diagnóstico:");
             diagnoseTracks();
             stopPlayback();
+            aviso("No pudimos reproducir la radio. Intenta de nuevo en unos minutos.", "error");
             return;
         }
         state.currentTrackIndex = (state.currentTrackIndex + 1) % CONFIG.playlist.length;
@@ -227,6 +241,9 @@ function handlePlaybackError() {
 
     // 4) Nada reproducible
     stopPlayback();
+    aviso(navigator.onLine === false
+        ? "Sin conexión a internet. Conéctate e intenta de nuevo."
+        : "No pudimos conectar con la radio. Intenta de nuevo en unos minutos.", "error");
 }
 
 // Al terminar una pista: en modo lista, avanzar en bucle
@@ -250,6 +267,11 @@ playPause.addEventListener("click", async () => {
     // Si ya está encendido (reproduciendo o cargando), apagar.
     if (state.mode !== "idle") {
         stopPlayback();
+        return;
+    }
+
+    if (navigator.onLine === false) {
+        aviso("Sin conexión a internet. Conéctate para escuchar VOS FM en vivo.", "error");
         return;
     }
 
@@ -311,18 +333,6 @@ window.addEventListener("DOMContentLoaded", async () => {
     await loadPlaylist();
     renderButton();
 
-    // Video de fondo: reproducción inline y muteada (móvil no abre el reproductor)
-    const video = document.getElementById("video_background");
-    if (video) {
-        video.muted = true;            // requerido para autoplay en iOS/Android
-        video.setAttribute("muted", "");
-        video.playsInline = true;
-        const tryPlayVideo = () => video.play().catch(() => {});
-        tryPlayVideo();
-        // Reintento en la primera interacción por si el navegador bloqueó el autoplay
-        document.addEventListener("touchstart", tryPlayVideo, { once: true, passive: true });
-        document.addEventListener("click", tryPlayVideo, { once: true });
-    }
 });
 
 // Controles del sistema (bloqueo/notificación) en móviles
@@ -332,8 +342,8 @@ if ("mediaSession" in navigator) {
         artist: "Radio en Vivo",
         album: "Bochil, Chiapas, México",
         artwork: [
-            { src: "img/icon-192.png?v=3", sizes: "192x192", type: "image/png" },
-            { src: "img/icon-512.png?v=3", sizes: "512x512", type: "image/png" }
+            { src: "img/icon-192.png?v=4", sizes: "192x192", type: "image/png" },
+            { src: "img/icon-512.png?v=4", sizes: "512x512", type: "image/png" }
         ]
     });
 

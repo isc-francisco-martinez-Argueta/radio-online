@@ -1,0 +1,92 @@
+/* =====================================================================
+   Paleta 02 "Azul nocturno" (sistema de color de VOS 91.3)
+   Fondo #081A33 · Letras #FFFFFF · Acento #60E6FF · Apoyo #FFA8BB
+   Se carga al final (index.html), encima de styles.css / programas.css / videos.css.
+   La "O" del logo no cambia. Debe coincidir con manifest (background_color / theme_color)
+   y con <meta name="theme-color"> y la pantalla de carga de index.html.
+   ===================================================================== */
+:root {
+    --navy: #081a33;          /* fondo */
+    --navy-2: #0c2343;        /* superficies (tarjetas, paneles) */
+    --navy-3: #10294d;        /* superficies elevadas */
+    --navy-deep: #051226;     /* pie de página */
+    --accent: #60e6ff;        /* acento: 11.8:1 sobre el fondo */
+    --support: #ffa8bb;       /* apoyo: 9.6:1 sobre el fondo */
+
+    --blue-2: var(--accent);  /* íconos, etiquetas de sección, detalles */
+    --focus: var(--accent);
+    --muted: #a9bad0;         /* texto secundario: 8.3:1 sobre el fondo */
+}
+
+html { background-color: var(--navy); }
+body {
+    background:
+        radial-gradient(1100px 620px at 12% -12%, rgba(96, 230, 255, 0.10), transparent 60%),
+        radial-gradient(900px 520px at 108% 6%, rgba(43, 139, 255, 0.14), transparent 55%),
+        linear-gradient(180deg, #081a33 0%, #071830 60%, #06152b 100%);
+    background-attachment: fixed;
+}
+
+/* Barra superior y menú de celular */
+.menu { background: rgba(8, 26, 51, 0.78); border-bottom-color: rgba(96, 230, 255, 0.12); }
+.menu-sheet { background: rgba(6, 21, 43, 0.97); }
+.menu-links a.is-active { background: rgba(96, 230, 255, 0.12); }
+
+/* Portada */
+.img-header { background: radial-gradient(70% 60% at 50% 40%, rgba(96, 230, 255, 0.10), transparent 70%), linear-gradient(180deg, #0a1f3d 0%, #081a33 100%); }
+.hero-fx { background: radial-gradient(85% 75% at 50% 40%, #0c2547 0%, #061429 78%); }
+.hero-glass {
+    background:
+        linear-gradient(rgba(255, 255, 255, 0.03), rgba(5, 18, 38, 0.22)),
+        radial-gradient(62% 64% at 50% 46%, transparent 30%, rgba(5, 18, 38, 0.55) 100%);
+}
+.img-header .welcome { background: radial-gradient(58% 60% at 50% 46%, transparent 42%, rgba(5, 18, 38, 0.55) 100%); }
+.hero-tagline span { color: var(--support); }
+
+/* Etiquetas "al aire" con el color de apoyo */
+.mp-live__tag, .prog-now--live small, .hero-card__kicker.is-live { color: var(--support); }
+.prog-now--live { border-color: rgba(255, 168, 187, 0.5); background: linear-gradient(135deg, rgba(255, 168, 187, 0.14), rgba(96, 230, 255, 0.08)); }
+
+/* Programas */
+.programas {
+    background:
+        radial-gradient(55% 60% at 12% 0%, rgba(96, 230, 255, 0.10), transparent 70%),
+        radial-gradient(55% 60% at 88% 100%, rgba(123, 43, 255, 0.14), transparent 70%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.015));
+}
+.prog-card { background: var(--navy-2); }
+.prog-card.is-live { background: linear-gradient(var(--navy-2), var(--navy-2)) padding-box, linear-gradient(135deg, #ff2d3f, #7b2bff 50%, #00c8ff) border-box; }
+.prog-arrow { background: rgba(12, 35, 67, 0.92); }
+.prog-badge--next { background: #0b4f7a; }                      /* blanco encima: 8.6:1 */
+.flyer-dialog { background: var(--navy-2); }
+.prog-placeholder { background: radial-gradient(80% 60% at 20% 10%, rgba(255, 45, 63, 0.3), transparent 60%), radial-gradient(80% 60% at 90% 90%, rgba(96, 230, 255, 0.3), transparent 60%), linear-gradient(160deg, #0f2a50, #071630); }
+
+/* Publicidad */
+.ads-panel {
+    background:
+        radial-gradient(60% 90% at 0% 0%, rgba(255, 45, 63, 0.24), transparent 60%),
+        radial-gradient(60% 90% at 100% 100%, rgba(96, 230, 255, 0.22), transparent 60%),
+        linear-gradient(160deg, #0f2a50, #071630);
+}
+.ads-opt input:checked + .ads-opt__box { background: rgba(96, 230, 255, 0.12); border-color: var(--accent); }
+.ads-opt input:checked + .ads-opt__box .ads-opt__check { background: #0b6a8a; border-color: #0b6a8a; }
+
+/* Videos */
+.videos {
+    background:
+        radial-gradient(50% 60% at 90% 0%, rgba(255, 0, 51, 0.12), transparent 70%),
+        radial-gradient(50% 60% at 5% 100%, rgba(96, 230, 255, 0.10), transparent 70%),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.012));
+}
+
+/* Pie */
+footer { background: var(--navy-deep); }
+.footer-bottom { background: #040e1f; }
+
+/* Ventanas y avisos */
+.vos-toast { background: rgba(12, 35, 67, 0.97); }
+.chat-menu { background: rgba(12, 35, 67, 0.96); }
+.pwa-install-card { background: rgba(12, 35, 67, 0.92); }
+
+/* Pantalla de carga y reproductor detenido */
+.mp-art { background: linear-gradient(135deg, rgba(96, 230, 255, 0.22), rgba(43, 139, 255, 0.22)); }

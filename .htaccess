@@ -1,0 +1,27 @@
+# Caché del navegador para VOS FM (Apache, requiere mod_headers).
+# Objetivo: que quien ya abrió la página o instaló la app reciba siempre la versión nueva.
+#   - HTML, manifest, service worker, CSS y JS: "no-cache" = el navegador puede guardarlos,
+#     pero PREGUNTA al servidor antes de usarlos (si no cambiaron, la respuesta es mínima: 304).
+#     Además los CSS/JS llevan ?v=N (tools/nueva-version.mjs), así que cada publicación es un archivo "nuevo".
+#   - Imágenes y fuentes: se guardan una semana (si cambias una, cámbiale el nombre o el ?v=).
+
+<IfModule mod_headers.c>
+    <FilesMatch "\.(html|webmanifest|css|js)$">
+        Header set Cache-Control "no-cache"
+    </FilesMatch>
+
+    # El service worker nunca debe salir de una caché
+    <Files "sw.js">
+        Header set Cache-Control "no-cache, no-store, must-revalidate"
+        Header set Service-Worker-Allowed "/"
+    </Files>
+
+    <FilesMatch "\.(png|jpe?g|webp|gif|svg|ico|woff2?)$">
+        Header set Cache-Control "public, max-age=604800"
+    </FilesMatch>
+</IfModule>
+
+# Tipo correcto para el manifest de la app
+<IfModule mod_mime.c>
+    AddType application/manifest+json .webmanifest
+</IfModule>

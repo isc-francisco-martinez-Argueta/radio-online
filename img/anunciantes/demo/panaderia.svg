@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 500" width="1200" height="500">
+<defs>
+ <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f59e0b"/><stop offset="1" stop-color="#b45309"/></linearGradient>
+ <radialGradient id="gl" cx="0.85" cy="0.3" r="0.6"><stop offset="0" stop-color="#fff" stop-opacity="0.22"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></radialGradient>
+</defs>
+<rect width="1200" height="500" fill="url(#bg)"/>
+<rect width="1200" height="500" fill="url(#gl)"/>
+<circle cx="1010" cy="250" r="170" fill="#fff" fill-opacity="0.10"/>
+<circle cx="1010" cy="250" r="120" fill="#fff" fill-opacity="0.12"/>
+<g transform="translate(1010 250)" fill="#fff"><circle r="58" fill="#fff"/><path d="M-40 10 Q0 -70 40 10 Z" fill="#b45309"/><rect x="-44" y="8" width="88" height="22" rx="11" fill="#b45309"/></g>
+<text x="80" y="140" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="700" fill="#fff7d6" letter-spacing="4">PANADERÍA LA ESPIGA</text>
+<text x="80" y="230" font-family="Arial, Helvetica, sans-serif" font-size="82" font-weight="800" fill="#fff">Pan recién hecho</text>
+<text x="80" y="295" font-family="Arial, Helvetica, sans-serif" font-size="34" fill="#fff" fill-opacity="0.9">Todos los días desde las 6:00 a.m.</text>
+<rect x="80" y="345" width="317" height="72" rx="36" fill="#fff"/>
+<text x="238.5" y="392" font-family="Arial, Helvetica, sans-serif" font-size="30" font-weight="800" fill="#b45309" text-anchor="middle">Haz tu pedido</text>
+</svg>
